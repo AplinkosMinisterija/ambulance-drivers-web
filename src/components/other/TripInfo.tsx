@@ -1,14 +1,8 @@
-import styled from "styled-components";
-import { formatTime } from "../../utils/functions";
-import Icon from "./Icons";
+import styled from 'styled-components';
+import { formatTime } from '../../utils/functions';
+import Icon from './Icons';
 
-const TripInfo = ({
-  properties,
-  stopsCount
-}: {
-  properties: any;
-  stopsCount?: number;
-}) => {
+const TripInfo = ({ properties, stopsCount }: { properties: any; stopsCount?: number }) => {
   if (!properties) return <></>;
   const { startAddress, endAddress, startDate, endDate } = properties;
   const formattedStartTime = formatTime(startDate);
@@ -24,18 +18,14 @@ const TripInfo = ({
       <Column>
         <InnerColumn>
           <Time>{formattedStartTime}</Time>
-          <Location>
-            {startAddress || "Nėra nurodytas pradinis  adresas"}
-          </Location>
+          <Location>{startAddress || 'Nėra nurodytas pradinis  adresas'}</Location>
         </InnerColumn>
         {stopsCount ? (
           <AdditionalTrips>{`+ ${stopsCount} tarpiniai sustojimai`}</AdditionalTrips>
         ) : undefined}
         <InnerColumn>
           <Time>{formattedEndTime}</Time>
-          <Location>
-            {endAddress || "Nėra nurodytas galutinis  adresas"}
-          </Location>
+          <Location>{endAddress || 'Nėra nurodytas galutinis  adresas'}</Location>
         </InnerColumn>
       </Column>
     </Row>

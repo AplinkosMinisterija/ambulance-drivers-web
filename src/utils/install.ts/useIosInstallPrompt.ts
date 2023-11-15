@@ -1,6 +1,6 @@
-import useShouldShowPrompt from "./useShouldShowPrompt";
+import useShouldShowPrompt from './useShouldShowPrompt';
 
-const iosInstallPromptedAt = "iosInstallPromptedAt";
+const iosInstallPromptedAt = 'iosInstallPromptedAt';
 
 const isIOS = (): boolean => {
   // @ts-ignore
@@ -17,9 +17,6 @@ const useIosInstallPrompt = (): [boolean, () => void] => {
   const [userShouldBePromptedToInstall, handleUserSeeingInstallPrompt] =
     useShouldShowPrompt(iosInstallPromptedAt);
 
-  return [
-    isIOS() && userShouldBePromptedToInstall,
-    handleUserSeeingInstallPrompt
-  ];
+  return [isIOS() && userShouldBePromptedToInstall, handleUserSeeingInstallPrompt];
 };
 export default useIosInstallPrompt;

@@ -1,30 +1,30 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import styled from "styled-components";
-import BackButton from "../components/buttons/BackButton";
-import Button from "../components/buttons/Button";
-import DefaultLayout from "../components/layouts/DefaultLayout";
-import Header from "../components/layouts/Header";
-import ActionCard from "../components/other/ActionCard";
-import DeleteCard from "../components/other/DeleteCard";
-import Icon from "../components/other/Icons";
-import LoaderComponent from "../components/other/LoaderComponent";
-import Tag from "../components/other/Tag";
-import TripInfo from "../components/other/TripInfo";
-import api from "../utils/api";
-import { stateTypes } from "../utils/constants";
-import { getPatient, handleAlert, updateState } from "../utils/functions";
-import { useIsOnline } from "../utils/hooks";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import styled from 'styled-components';
+import BackButton from '../components/buttons/BackButton';
+import Button from '../components/buttons/Button';
+import DefaultLayout from '../components/layouts/DefaultLayout';
+import Header from '../components/layouts/Header';
+import ActionCard from '../components/other/ActionCard';
+import DeleteCard from '../components/other/DeleteCard';
+import Icon from '../components/other/Icons';
+import LoaderComponent from '../components/other/LoaderComponent';
+import Tag from '../components/other/Tag';
+import TripInfo from '../components/other/TripInfo';
+import api from '../utils/api';
+import { stateTypes } from '../utils/constants';
+import { getPatient, handleAlert, updateState } from '../utils/functions';
+import { useIsOnline } from '../utils/hooks';
 import {
   buttonsTitles,
   deleteStateDescriptions,
   deleteStateTitle,
   multiTripSingularButtonLabels,
   stateLabels,
-  title
-} from "../utils/texts";
-import { Patient } from "../utils/types";
+  title,
+} from '../utils/texts';
+import { Patient } from '../utils/types';
 
 const PatientPage = () => {
   const { id } = useParams();
@@ -33,15 +33,24 @@ const PatientPage = () => {
   const isOnline = useIsOnline();
 
   const { data: patientServer, isFetching } = useQuery(
-    ["tripPatient", id],
+    ['tripPatient', id],
     () => api.getTripPatient(id!),
-    {}
+    {},
   );
 
   const patient = getPatient(patientServer?.value) as Patient;
   const currentState = patient?.state;
 
-  const declinePatientMutation = useMutation(
+  const declinePatientMutation = useMutation((values: any) => api.updatePatientTrip(values), {
+    onError: () => {
+      handleAlert();
+    },
+    onSuccess: async () => {
+      navigate(-1);
+    },
+  });
+
+  const { isLoading: patientUpdateLoading, mutateAsync: updatePatientMutateAsync } = useMutation(
     (values: any) => api.updatePatientTrip(values),
     {
       onError: () => {
@@ -49,25 +58,13 @@ const PatientPage = () => {
       },
       onSuccess: async () => {
         navigate(-1);
-      }
-    }
-  );
-
-  const {
-    isLoading: patientUpdateLoading,
-    mutateAsync: updatePatientMutateAsync
-  } = useMutation((values: any) => api.updatePatientTrip(values), {
-    onError: () => {
-      handleAlert();
+      },
     },
-    onSuccess: async () => {
-      navigate(-1);
-    }
-  });
+  );
 
   const handleUpdateState = async (mutateAsync: any, state: string) => {
     updateState(mutateAsync, state, {
-      pavezejimo_elementas: id!
+      pavezejimo_elementas: id!,
     });
   };
 
@@ -93,15 +90,13 @@ const PatientPage = () => {
       >
         {multiTripSingularButtonLabels.end}
       </Button>
-    )
+    ),
   };
 
   const showDeleteButton =
-    [stateTypes.start].some((item) => [currentState].includes(item)) &&
-    isOnline;
+    [stateTypes.start].some((item) => [currentState].includes(item)) && isOnline;
 
-  if (isFetching || declinePatientMutation.isLoading)
-    return <LoaderComponent />;
+  if (isFetching || declinePatientMutation.isLoading) return <LoaderComponent />;
 
   return (
     <DefaultLayout maxWidth="800px">
@@ -127,7 +122,7 @@ const PatientPage = () => {
         <TripInfo properties={patient!} />
         <ActionContainer>
           <ActionCard
-            icon={"phone"}
+            icon={'phone'}
             text={buttonsTitles.callPatient}
             onClick={() => {
               //@ts-ignore
@@ -144,10 +139,7 @@ const PatientPage = () => {
             setVisible(false);
           }}
           handleDelete={async () => {
-            await handleUpdateState(
-              declinePatientMutation.mutateAsync,
-              stateTypes.decline
-            );
+            await handleUpdateState(declinePatientMutation.mutateAsync, stateTypes.decline);
 
             setVisible(false);
           }}

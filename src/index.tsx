@@ -1,38 +1,33 @@
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { PersistGate } from "redux-persist/integration/react";
-import { ThemeProvider } from "styled-components";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import redux from "./state/store";
-import { GlobalStyle, theme } from "./styles/index";
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from 'styled-components';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import redux from './state/store';
+import { GlobalStyle, theme } from './styles/index';
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const { store, persistor } = redux;
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      cacheTime: 1000 * 60 * 60 * 24
-    }
-  }
+      cacheTime: 1000 * 60 * 60 * 24,
+    },
+  },
 });
 
 const persister = createSyncStoragePersister({
-  storage: window.localStorage
+  storage: window.localStorage,
 });
 
 root.render(
-  <PersistQueryClientProvider
-    client={queryClient}
-    persistOptions={{ persister }}
-  >
+  <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <ThemeProvider theme={theme}>
@@ -43,7 +38,7 @@ root.render(
         </ThemeProvider>
       </PersistGate>
     </Provider>
-  </PersistQueryClientProvider>
+  </PersistQueryClientProvider>,
 );
 
 // If you want your app to work offline and load faster, you can change

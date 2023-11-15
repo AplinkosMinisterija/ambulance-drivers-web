@@ -1,15 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = "";
+const initialState = '';
 
 export const CurrentTripIdReducer = createSlice({
-  name: "currentTripId",
+  name: 'currentTripId',
   initialState,
   reducers: {
     setCurrentTrip: (_, action) => {
       return action.payload;
-    }
-  }
+    },
+  },
 });
 
 export default CurrentTripIdReducer.reducer;

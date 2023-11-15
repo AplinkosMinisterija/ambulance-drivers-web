@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { RootState } from "../store";
+import { createSlice } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 
 export interface OfflineProps {
   trips: any;
 }
 
 const initialState: OfflineProps = {
-  trips: {}
+  trips: {},
 };
 
 export const OfflineReducer = createSlice({
-  name: "offline",
+  name: 'offline',
   initialState,
   reducers: {
     setOfflineTrips: (state, action) => {
@@ -18,10 +18,10 @@ export const OfflineReducer = createSlice({
 
       return {
         ...state,
-        trips: { ...data }
+        trips: { ...data },
       };
-    }
-  }
+    },
+  },
 });
 
 export const selectOffline = (state: RootState) => state;

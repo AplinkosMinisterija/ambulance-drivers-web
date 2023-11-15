@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import useShouldShowPrompt from "./useShouldShowPrompt";
+import { useEffect, useState } from 'react';
+import useShouldShowPrompt from './useShouldShowPrompt';
 
-const webInstallPromptedAt = "webInstallPromptedAt";
+const webInstallPromptedAt = 'webInstallPromptedAt';
 
 const useWebInstallPrompt = (): [any, () => void, () => void] => {
   const [installPromptEvent, setInstallPromptEvent] = useState<any>();
@@ -16,12 +16,8 @@ const useWebInstallPrompt = (): [any, () => void, () => void] => {
         setInstallPromptEvent(event);
       }
     };
-    window.addEventListener("beforeinstallprompt", beforeInstallPromptHandler);
-    return () =>
-      window.removeEventListener(
-        "beforeinstallprompt",
-        beforeInstallPromptHandler
-      );
+    window.addEventListener('beforeinstallprompt', beforeInstallPromptHandler);
+    return () => window.removeEventListener('beforeinstallprompt', beforeInstallPromptHandler);
   }, [userShouldBePromptedToInstall]);
 
   const handleInstallDeclined = () => {
@@ -33,7 +29,7 @@ const useWebInstallPrompt = (): [any, () => void, () => void] => {
     installPromptEvent.prompt();
 
     installPromptEvent.userChoice.then((choice: any) => {
-      if (choice.outcome !== "accepted") {
+      if (choice.outcome !== 'accepted') {
         handleUserSeeingInstallPrompt();
       }
       setInstallPromptEvent(null);

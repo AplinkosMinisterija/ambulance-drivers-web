@@ -1,43 +1,34 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
-import styled from "styled-components";
-import BackButton from "../components/buttons/BackButton";
-import Button from "../components/buttons/Button";
-import Header from "../components/layouts/Header";
-import ActionCard from "../components/other/ActionCard";
-import DeleteCard from "../components/other/DeleteCard";
-import DisableText from "../components/other/DisableText";
-import Icon from "../components/other/Icons";
-import InfoItem from "../components/other/InfoItem";
-import LoaderComponent from "../components/other/LoaderComponent";
-import Tag from "../components/other/Tag";
-import TripInfo from "../components/other/TripInfo";
-import { device } from "../styles";
-import api, { getMapUrl } from "../utils/api";
-import { stateTypes } from "../utils/constants";
-import {
-  getDistance,
-  handleGetCurrentLocation,
-  secondsToHHMMSS
-} from "../utils/functions";
-import {
-  useCurrentLocation,
-  useIsOnline,
-  useOfflineTrips,
-  useUpdateTrip
-} from "../utils/hooks";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import styled from 'styled-components';
+import BackButton from '../components/buttons/BackButton';
+import Button from '../components/buttons/Button';
+import Header from '../components/layouts/Header';
+import ActionCard from '../components/other/ActionCard';
+import DeleteCard from '../components/other/DeleteCard';
+import DisableText from '../components/other/DisableText';
+import Icon from '../components/other/Icons';
+import InfoItem from '../components/other/InfoItem';
+import LoaderComponent from '../components/other/LoaderComponent';
+import Tag from '../components/other/Tag';
+import TripInfo from '../components/other/TripInfo';
+import { device } from '../styles';
+import api, { getMapUrl } from '../utils/api';
+import { stateTypes } from '../utils/constants';
+import { getDistance, handleGetCurrentLocation, secondsToHHMMSS } from '../utils/functions';
+import { useCurrentLocation, useIsOnline, useOfflineTrips, useUpdateTrip } from '../utils/hooks';
 import {
   buttonsTitles,
   deleteStateDescriptions,
   deleteStateTitle,
   formLabels,
   stateLabels,
-  title
-} from "../utils/texts";
-import { Trip } from "../utils/types";
-import { actions } from "../state/currentTrip/reducer";
+  title,
+} from '../utils/texts';
+import { Trip } from '../utils/types';
+import { actions } from '../state/currentTrip/reducer';
 
 const SingleTrip = ({ trip }: { trip: Trip }) => {
   const { id } = useParams();
@@ -51,15 +42,14 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
   let currentTrip = value?.[id!] ? [...value[id!]] : undefined;
   const currentTripState = currentTrip?.slice(-1)?.[0]?.state;
 
-  const { mutateAsync: tripMutateAsync, isLoading: tripLoading } =
-    useUpdateTrip(
-      async () => await queryClient.invalidateQueries(["trip", id])
-    );
+  const { mutateAsync: tripMutateAsync, isLoading: tripLoading } = useUpdateTrip(
+    async () => await queryClient.invalidateQueries(['trip', id]),
+  );
 
   const declineTripMutation = useMutation((values) => api.updateTrip(values), {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(["trip", id]);
-    }
+      await queryClient.invalidateQueries(['trip', id]);
+    },
   });
   const handleUpdateState = async (mutateAsync: any, state: string) => {
     const res = await handleGetCurrentLocation();
@@ -73,8 +63,8 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
           pavezejimas: id!,
           busena: state,
           lat,
-          long: lng
-        }
+          long: lng,
+        },
       });
     } else {
       if (currentTrip) {
@@ -114,7 +104,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
         loading={tripLoading}
         disabled={tripLoading}
         onClick={() => {
-          dispatch(actions.setCurrentTrip(""))
+          dispatch(actions.setCurrentTrip(''));
           handleUpdateState(tripMutateAsync, stateTypes.end);
         }}
       >
@@ -122,7 +112,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
       </Button>
     ),
     [stateTypes.decline]: <DisableText text={formLabels.tripDeclined} />,
-    [stateTypes.end]: <DisableText text={formLabels.tripEnded} />
+    [stateTypes.end]: <DisableText text={formLabels.tripEnded} />,
   };
 
   const renderContent = () => {
@@ -152,7 +142,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
   const mapUrl = getMapUrl(
     `${location?.lat},${location?.lng}`,
     trip?.endCoordinates!,
-    trip?.startCoordinates!
+    trip?.startCoordinates!,
   );
 
   const asmensTelefonoNumeris = trip?.phone;
@@ -162,8 +152,8 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
 
   const formattedDistance = getDistance(distance);
   const duration = secondsToHHMMSS(time!);
-  const showDeleteButton = [stateTypes.tripStart, stateTypes.start].some(
-    (item) => [state, currentTripState].includes(item)
+  const showDeleteButton = [stateTypes.tripStart, stateTypes.start].some((item) =>
+    [state, currentTripState].includes(item),
   );
 
   if (declineTripMutation.isLoading) return <LoaderComponent />;
@@ -201,7 +191,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
           <TripInfo properties={trip!} />
           <ActionContainer>
             <ActionCard
-              icon={"phone"}
+              icon={'phone'}
               text={buttonsTitles.callPatient}
               onClick={() => {
                 //@ts-ignore
@@ -210,7 +200,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
             />
 
             <ActionCard
-              icon={"map"}
+              icon={'map'}
               text={buttonsTitles.tripMap}
               onClick={() => {
                 //@ts-ignore
@@ -228,10 +218,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
             setVisible(false);
           }}
           handleDelete={async () => {
-            await handleUpdateState(
-              declineTripMutation.mutateAsync,
-              stateTypes.decline
-            );
+            await handleUpdateState(declineTripMutation.mutateAsync, stateTypes.decline);
 
             setVisible(false);
           }}

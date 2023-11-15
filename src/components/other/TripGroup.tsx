@@ -1,41 +1,34 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router";
-import styled from "styled-components";
-import { slugs } from "../../App";
-import { actions } from "../../state/currentTrip/reducer";
-import api, { getMapUrl } from "../../utils/api";
-import { stateTypes } from "../../utils/constants";
-import {
-  formatTime,
-  handleGetCurrentLocation,
-  updateState
-} from "../../utils/functions";
-import {
-  multiTripPluralButtonLabels,
-  multiTripSingularButtonLabels
-} from "../../utils/texts";
-import { Patient } from "../../utils/types";
-import Button from "../buttons/Button";
-import Icon from "./Icons";
-import PatientCard from "./PatientCard";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
+import styled from 'styled-components';
+import { slugs } from '../../App';
+import { actions } from '../../state/currentTrip/reducer';
+import api, { getMapUrl } from '../../utils/api';
+import { stateTypes } from '../../utils/constants';
+import { formatTime, handleGetCurrentLocation, updateState } from '../../utils/functions';
+import { multiTripPluralButtonLabels, multiTripSingularButtonLabels } from '../../utils/texts';
+import { Patient } from '../../utils/types';
+import Button from '../buttons/Button';
+import Icon from './Icons';
+import PatientCard from './PatientCard';
 
 const buttonTextPlural = {
   [stateTypes.approved]: multiTripPluralButtonLabels.start,
-  [stateTypes.tripStart]: "Atvykau i tikslą",
-  [stateTypes.tripEnd]: multiTripPluralButtonLabels.tripEnd
+  [stateTypes.tripStart]: 'Atvykau i tikslą',
+  [stateTypes.tripEnd]: multiTripPluralButtonLabels.tripEnd,
 };
 
 const buttonTextSingular = {
   [stateTypes.approved]: multiTripSingularButtonLabels.start,
-  [stateTypes.tripStart]: "Atvykau i tikslą",
-  [stateTypes.tripEnd]: multiTripSingularButtonLabels.tripEnd
+  [stateTypes.tripStart]: 'Atvykau i tikslą',
+  [stateTypes.tripEnd]: multiTripSingularButtonLabels.tripEnd,
 };
 
 const updateStates = {
   [stateTypes.approved]: stateTypes.start,
   [stateTypes.tripStart]: stateTypes.tripEnd,
-  [stateTypes.tripEnd]: stateTypes.end
+  [stateTypes.tripEnd]: stateTypes.end,
 };
 
 const TripGroup = ({
@@ -44,7 +37,7 @@ const TripGroup = ({
   coordinates,
   disabled,
   isLast = false,
-  group
+  group,
 }: {
   address: string;
   disabled: boolean;
@@ -60,22 +53,19 @@ const TripGroup = ({
 
   const isOnePatient = group?.length === 1;
 
-  const updatePatientTrip = useMutation(
-    (values: any) => api.updatePatientTrip(values),
-    {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["tripPatients", id]);
-      }
-    }
-  );
+  const updatePatientTrip = useMutation((values: any) => api.updatePatientTrip(values), {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(['tripPatients', id]);
+    },
+  });
 
   const onButtonClick = async (updateStateType: string) => {
     await Promise.all(
       group.map(async (item) => {
         await updateState(updatePatientTrip.mutateAsync, updateStateType, {
-          pavezejimo_elementas: item.id!
+          pavezejimo_elementas: item.id!,
         });
-      })
+      }),
     );
   };
 
@@ -101,21 +91,13 @@ const TripGroup = ({
     if (group.every((item) => [stateTypes.approved].includes(item.state)))
       return stateTypes.approved;
 
-    if (
-      group.every((item) =>
-        [stateTypes.tripStart, stateTypes.decline].includes(item.state)
-      )
-    )
+    if (group.every((item) => [stateTypes.tripStart, stateTypes.decline].includes(item.state)))
       return stateTypes.tripStart;
 
-    if (
-      group.every((item) =>
-        [stateTypes.tripEnd, stateTypes.decline].includes(item.state)
-      )
-    )
+    if (group.every((item) => [stateTypes.tripEnd, stateTypes.decline].includes(item.state)))
       return stateTypes.tripEnd;
 
-    return "";
+    return '';
   };
 
   const state = getState();
@@ -164,9 +146,7 @@ const TripGroup = ({
               disabled={updatePatientTrip.isLoading}
               onClick={() => onButtonClick(updateStates[state])}
             >
-              {isOnePatient
-                ? buttonTextSingular[state]
-                : buttonTextPlural[state]}
+              {isOnePatient ? buttonTextSingular[state] : buttonTextPlural[state]}
             </Button>
           )}
         </Column2>

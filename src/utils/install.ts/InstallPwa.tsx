@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import Button, { ButtonColors } from "../../components/buttons/Button";
-import Icon from "../../components/other/Icons";
-import Modal from "../../components/other/Modal";
-import { device } from "../../styles";
-import { buttonsTitles } from "../texts";
-import useIosInstallPrompt from "./useIosInstallPrompt";
-import useWebInstallPrompt from "./useWebInstallPrompt";
+import styled from 'styled-components';
+import Button, { ButtonColors } from '../../components/buttons/Button';
+import Icon from '../../components/other/Icons';
+import Modal from '../../components/other/Modal';
+import { device } from '../../styles';
+import { buttonsTitles } from '../texts';
+import useIosInstallPrompt from './useIosInstallPrompt';
+import useWebInstallPrompt from './useWebInstallPrompt';
 
 export const InstallPWA = () => {
   const [iosInstallPrompt, handleIOSInstallDeclined] = useIosInstallPrompt();
@@ -13,7 +13,7 @@ export const InstallPWA = () => {
     useWebInstallPrompt();
 
   const isiOS13AndUp = /OS (13|14)/.test(window.navigator.userAgent);
-  const iOSClass = isiOS13AndUp ? "modernShare" : "share";
+  const iOSClass = isiOS13AndUp ? 'modernShare' : 'share';
 
   if (!iosInstallPrompt && !webInstallPrompt) {
     return null;
@@ -28,12 +28,12 @@ export const InstallPWA = () => {
           {iosInstallPrompt && (
             <>
               <Description className="text-center">
-                Norint įdiegti aplikaciją, pasinaudokite spustelėjimu ant šios
-                ikonos, ekrano apačioje.
+                Norint įdiegti aplikaciją, pasinaudokite spustelėjimu ant šios ikonos, ekrano
+                apačioje.
                 <StyledIcon name={iOSClass} />
               </Description>
               <Button
-                height={"30px"}
+                height={'30px'}
                 variant={ButtonColors.TRANSPARENT}
                 onClick={handleIOSInstallDeclined}
               >
@@ -43,11 +43,11 @@ export const InstallPWA = () => {
           )}
           {webInstallPrompt && (
             <>
-              <Button height={"30px"} onClick={handleWebInstallAccepted}>
+              <Button height={'30px'} onClick={handleWebInstallAccepted}>
                 {buttonsTitles.install}
               </Button>
               <Button
-                height={"30px"}
+                height={'30px'}
                 variant={ButtonColors.TRANSPARENT}
                 onClick={handleWebInstallDeclined}
               >

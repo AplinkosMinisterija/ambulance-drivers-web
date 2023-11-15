@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Div100vh from "react-div-100vh";
-import styled from "styled-components";
-import Button, { ButtonColors } from "../components/buttons/Button";
-import { geLoginUrl } from "../utils/api";
-import { buttonLabels, descriptions, title } from "../utils/texts";
+import { useState } from 'react';
+import Div100vh from 'react-div-100vh';
+import styled from 'styled-components';
+import Button, { ButtonColors } from '../components/buttons/Button';
+import { geLoginUrl } from '../utils/api';
+import { buttonLabels, descriptions, title } from '../utils/texts';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const Login = () => {
             <Description>{descriptions.login}</Description>
           </InnerContent>
           <Button
-            color={"#0A196F"}
+            color={'#0A196F'}
             variant={ButtonColors.LOGIN}
             loading={loading}
             onClick={() => {

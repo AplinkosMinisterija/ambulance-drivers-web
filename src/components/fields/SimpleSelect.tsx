@@ -1,8 +1,8 @@
-import { map } from "lodash";
-import { useState } from "react";
-import styled from "styled-components";
-import { device } from "../../styles";
-import Icon from "../other/Icons";
+import { map } from 'lodash';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { device } from '../../styles';
+import Icon from '../other/Icons';
 
 interface SImpleSelectProps {
   value?: { slug: string; title: string };
@@ -23,7 +23,7 @@ const SimpleSelect = ({
   onChange,
   iconRight,
   iconleft,
-  showLabel
+  showLabel,
 }: SImpleSelectProps) => {
   const [showSelect, setShowSelect] = useState(false);
   const handleBlur = (event: any) => {
@@ -44,9 +44,7 @@ const SimpleSelect = ({
           <>
             <OptionButton onClick={() => setShowSelect(!showSelect)}>
               {iconleft ? <MenuIcon name={iconleft} /> : null}
-              {showLabel ? (
-                <OptionLabel>{getOptionLabel(value) || ""}</OptionLabel>
-              ) : null}
+              {showLabel ? <OptionLabel>{getOptionLabel(value) || ''}</OptionLabel> : null}
               {iconRight ? <MenuIcon name={iconRight} /> : null}
             </OptionButton>
             {showSelect ? (

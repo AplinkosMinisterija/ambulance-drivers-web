@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { stateTypes } from "../../utils/constants";
-import Tag from "./Tag";
+import styled from 'styled-components';
+import { stateTypes } from '../../utils/constants';
+import Tag from './Tag';
 
 interface PatientCardProps {
   state: string;
@@ -9,24 +9,24 @@ interface PatientCardProps {
 }
 
 const borderColors = {
-  [stateTypes.tripStart]: "#9CD323",
-  [stateTypes.end]: "#9CD323",
-  [stateTypes.tripEnd]: "#9CD323",
-  [stateTypes.decline]: "#C11574"
+  [stateTypes.tripStart]: '#9CD323',
+  [stateTypes.end]: '#9CD323',
+  [stateTypes.tripEnd]: '#9CD323',
+  [stateTypes.decline]: '#C11574',
 };
 
 const tagColors = {
-  [stateTypes.tripStart]: "#9cd323",
-  [stateTypes.end]: "#9cd323",
-  [stateTypes.tripEnd]: "#9cd323",
-  [stateTypes.decline]: "#C11574"
+  [stateTypes.tripStart]: '#9cd323',
+  [stateTypes.end]: '#9cd323',
+  [stateTypes.tripEnd]: '#9cd323',
+  [stateTypes.decline]: '#C11574',
 };
 
 const backgroundColors = {
-  [stateTypes.tripStart]: "#9CD3233D",
-  [stateTypes.end]: "#9CD3233D",
-  [stateTypes.tripEnd]: "#9CD3233D",
-  [stateTypes.decline]: "#FDF2FA"
+  [stateTypes.tripStart]: '#9CD3233D',
+  [stateTypes.end]: '#9CD3233D',
+  [stateTypes.tripEnd]: '#9CD3233D',
+  [stateTypes.decline]: '#FDF2FA',
 };
 
 const PatientCard = ({ state, name, onClick }: PatientCardProps) => {
@@ -34,7 +34,7 @@ const PatientCard = ({ state, name, onClick }: PatientCardProps) => {
     stateTypes.tripStart,
     stateTypes.decline,
     stateTypes.end,
-    stateTypes.tripEnd
+    stateTypes.tripEnd,
   ].includes(state);
 
   return (
@@ -53,9 +53,8 @@ const Row = styled.div`
 `;
 
 const Container = styled.div<{ state: string }>`
-  background: ${({ state }) => backgroundColors[state] || "#f5f5f5"};
-  border: ${({ state }) =>
-    borderColors[state] ? `1px solid ${borderColors[state]}` : ""};
+  background: ${({ state }) => backgroundColors[state] || '#f5f5f5'};
+  border: ${({ state }) => (borderColors[state] ? `1px solid ${borderColors[state]}` : '')};
   padding: 14px 16px;
   border-radius: 4px;
 `;

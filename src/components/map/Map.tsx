@@ -1,16 +1,16 @@
-import { LayersControl, MapContainer, Marker, TileLayer } from "react-leaflet";
-import { Routing } from "./RoutingControl";
+import { LayersControl, MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { Routing } from './RoutingControl';
 //@ts-ignore
 
 const maps = {
-  base: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  base: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 };
 
 const Map = ({
   coordinates,
   currentLocation,
   destinationIcon,
-  otherIcon
+  otherIcon,
 }: {
   coordinates: { start?: number[]; end?: number[] };
   destinationIcon: any;
@@ -24,7 +24,7 @@ const Map = ({
         center={[37.0902, -95.7129]}
         zoom={3}
         zoomControl={false}
-        style={{ height: "100vh", width: "100%", padding: 0 }}
+        style={{ height: '100vh', width: '100%', padding: 0 }}
       >
         {coordinates?.end && currentLocation && (
           <Routing

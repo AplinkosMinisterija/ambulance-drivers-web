@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import styled from "styled-components";
-import { device } from "../../styles";
-import api from "../../utils/api";
-import { getDistance, getPatients } from "../../utils/functions";
-import { Patient, Trip } from "../../utils/types";
-import InfoItem from "./InfoItem";
-import Tag from "./Tag";
-import TripInfo from "./TripInfo";
+import { useQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
+import { device } from '../../styles';
+import api from '../../utils/api';
+import { getDistance, getPatients } from '../../utils/functions';
+import { Patient, Trip } from '../../utils/types';
+import InfoItem from './InfoItem';
+import Tag from './Tag';
+import TripInfo from './TripInfo';
 
 export interface FishStockingItemProps {
   trip: Trip;
@@ -15,21 +15,12 @@ export interface FishStockingItemProps {
   disabled?: boolean;
 }
 
-const TripCard = ({
-  trip,
-  onClick,
-  lastOfflineState,
-  disabled = false
-}: FishStockingItemProps) => {
+const TripCard = ({ trip, onClick, lastOfflineState, disabled = false }: FishStockingItemProps) => {
   const { id, state, distance, startAddress, endAddress, direction } = trip;
   const formattedDistance = getDistance(distance);
   const currentState = lastOfflineState || state;
 
-  const { data: tripPatients } = useQuery(
-    ["tripPatients", id],
-    () => api.getTripPatients(id!),
-    {}
-  );
+  const { data: tripPatients } = useQuery(['tripPatients', id], () => api.getTripPatients(id!), {});
 
   const patients = getPatients(tripPatients?.value) as Patient[];
 
@@ -39,7 +30,7 @@ const TripCard = ({
     uniqueStopsCount[startAddress!] = startAddress;
     uniqueStopsCount[endAddress] = endAddress;
 
-    patients!?.forEach((item) => {
+    patients?.forEach((item) => {
       uniqueStopsCount[item?.startAddress] = item.startAddress;
       uniqueStopsCount[item?.endAddress!] = item.endAddress;
     });
@@ -76,7 +67,7 @@ const IconRow = styled.div`
 
 const Container = styled.a<{ $disabled: boolean }>`
   opacity: ${({ $disabled }) => ($disabled ? 0.48 : 1)};
-  cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   background-color: #ffffff;
   border: 1px solid #0a196f29;
   border-radius: 4px;

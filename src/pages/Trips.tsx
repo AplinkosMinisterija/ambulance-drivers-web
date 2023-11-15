@@ -1,33 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
-import { isEmpty } from "lodash";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import { slugs } from "../App";
-import Datepicker from "../components/fields/DatePicker";
-import DefaultLayout from "../components/layouts/DefaultLayout";
-import Header from "../components/layouts/Header";
-import DisableText from "../components/other/DisableText";
-import Icon from "../components/other/Icons";
-import LoaderComponent from "../components/other/LoaderComponent";
-import TripCard from "../components/other/TripCard";
-import { useAppSelector } from "../state/hooks";
-import { device } from "../styles";
-import api from "../utils/api";
-import {
-  formatDateFrom,
-  formatDateTo,
-  handleAlertFromServer,
-  mapTrip
-} from "../utils/functions";
-import { useIsOnline, useLogout, useOfflineTrips } from "../utils/hooks";
-import { emptyStateDescriptions, emptyStateTitle } from "../utils/texts";
-import { Trip } from "../utils/types";
+import { useQuery } from '@tanstack/react-query';
+import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { slugs } from '../App';
+import Datepicker from '../components/fields/DatePicker';
+import DefaultLayout from '../components/layouts/DefaultLayout';
+import Header from '../components/layouts/Header';
+import DisableText from '../components/other/DisableText';
+import Icon from '../components/other/Icons';
+import LoaderComponent from '../components/other/LoaderComponent';
+import TripCard from '../components/other/TripCard';
+import { useAppSelector } from '../state/hooks';
+import { device } from '../styles';
+import api from '../utils/api';
+import { formatDateFrom, formatDateTo, handleAlertFromServer, mapTrip } from '../utils/functions';
+import { useIsOnline, useLogout, useOfflineTrips } from '../utils/hooks';
+import { emptyStateDescriptions, emptyStateTitle } from '../utils/texts';
+import { Trip } from '../utils/types';
 const Trips = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const dateValue = searchParams.get("date") as string;
+  const dateValue = searchParams.get('date') as string;
   const user = useAppSelector((state) => state.user.userData);
   const [date, setDate] = useState(dateValue || new Date());
   const isOnline = useIsOnline();
@@ -48,45 +43,41 @@ const Trips = () => {
 
   const query = {
     query: {
-      type: "and",
+      type: 'and',
       value: [
         {
-          type: "gte",
-          field: "properties.data",
-          value: formatDateFrom(dateValue)
+          type: 'gte',
+          field: 'properties.data',
+          value: formatDateFrom(dateValue),
         },
         {
-          type: "lte",
-          field: "properties.data",
-          value: formatDateTo(dateValue)
+          type: 'lte',
+          field: 'properties.data',
+          value: formatDateTo(dateValue),
         },
         {
-          type: "eq",
-          field: "properties.vairuotojoId",
-          value: user.id
-        }
-      ]
+          type: 'eq',
+          field: 'properties.vairuotojoId',
+          value: user.id,
+        },
+      ],
     },
     orderBy: {
       fields: [
         {
-          field: "properties.pavezejimoPradzia",
-          direction: "asc"
-        }
-      ]
-    }
+          field: 'properties.pavezejimoPradzia',
+          direction: 'asc',
+        },
+      ],
+    },
   };
 
-  const { data, isFetching } = useQuery(
-    ["trips", dateValue],
-    () => api.trips(query),
-    {
-      onError: () => {
-        handleAlertFromServer();
-      },
-      retry: false
-    }
-  );
+  const { data, isFetching } = useQuery(['trips', dateValue], () => api.trips(query), {
+    onError: () => {
+      handleAlertFromServer();
+    },
+    retry: false,
+  });
 
   const renderContent = () => {
     if (isFetching) return <LoaderComponent />;
@@ -94,10 +85,7 @@ const Trips = () => {
     if (isEmpty(data?.data)) {
       return (
         <NotFoundContainer>
-          <DisableText
-            text={emptyStateTitle.trip}
-            description={emptyStateDescriptions.trip}
-          />
+          <DisableText text={emptyStateTitle.trip} description={emptyStateDescriptions.trip} />
         </NotFoundContainer>
       );
     }
@@ -113,11 +101,9 @@ const Trips = () => {
     return (
       <>
         {mappedTrips
-          .filter((item) => item.state !== "Atšauktas")
+          .filter((item) => item.state !== 'Atšauktas')
           ?.map((trip) => {
-            let offlineTrip = value?.[trip?.id!]
-              ? [...value[trip?.id!]]
-              : undefined;
+            const offlineTrip = value?.[trip?.id!] ? [...value[trip?.id!]] : undefined;
 
             return (
               <TripCard

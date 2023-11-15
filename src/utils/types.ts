@@ -75,9 +75,9 @@ export interface Patient {
 export interface UserResponse {
   id: string;
   attributes: {
-    "multipass:email:primary": string;
-    "multipass:given-name": string[];
-    "multipass:family-name": string[];
+    'multipass:email:primary': string;
+    'multipass:given-name': string[];
+    'multipass:family-name': string[];
   };
 }
 

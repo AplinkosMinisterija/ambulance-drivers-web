@@ -1,42 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { isEmpty } from "lodash";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
-import styled from "styled-components";
-import BackButton from "../components/buttons/BackButton";
-import Header from "../components/layouts/Header";
-import DisableText from "../components/other/DisableText";
-import InfoItem from "../components/other/InfoItem";
-import LoaderComponent from "../components/other/LoaderComponent";
-import Tag from "../components/other/Tag";
-import TripGroup from "../components/other/TripGroup";
-import { actions } from "../state/currentTrip/reducer";
-import { device } from "../styles";
-import api from "../utils/api";
-import { stateTypes } from "../utils/constants";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { isEmpty } from 'lodash';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import styled from 'styled-components';
+import BackButton from '../components/buttons/BackButton';
+import Header from '../components/layouts/Header';
+import DisableText from '../components/other/DisableText';
+import InfoItem from '../components/other/InfoItem';
+import LoaderComponent from '../components/other/LoaderComponent';
+import Tag from '../components/other/Tag';
+import TripGroup from '../components/other/TripGroup';
+import { actions } from '../state/currentTrip/reducer';
+import { device } from '../styles';
+import api from '../utils/api';
+import { stateTypes } from '../utils/constants';
 import {
   getDistance,
   getKeys,
   getUniqueByProp,
   secondsToHHMMSS,
   sortKeys,
-  updateState
-} from "../utils/functions";
-import { useIsOnline } from "../utils/hooks";
-import { formLabels, title } from "../utils/texts";
-import { Patient, Trip } from "../utils/types";
+  updateState,
+} from '../utils/functions';
+import { useIsOnline } from '../utils/hooks';
+import { formLabels, title } from '../utils/texts';
+import { Patient, Trip } from '../utils/types';
 const allPatientsTakenTypes = [stateTypes.tripStart, stateTypes.decline];
 const anyPatientsTakenTypes = [stateTypes.start, stateTypes.decline];
 const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
 
-const MultiTrip = ({
-  trip,
-  tripPatientsData
-}: {
-  trip: Trip;
-  tripPatientsData?: Patient[];
-}) => {
+const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: Patient[] }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -45,47 +39,36 @@ const MultiTrip = ({
 
   const updateTripMutation = useMutation((values) => api.updateTrip(values), {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(["trip", id]);
-      await queryClient.invalidateQueries(["tripPatients", id]);
-    }
+      await queryClient.invalidateQueries(['trip', id]);
+      await queryClient.invalidateQueries(['tripPatients', id]);
+    },
   });
 
   const uniqueStops: { [key: string]: Patient[] } = getUniqueByProp(
     tripPatientsData,
-    "startAddress"
+    'startAddress',
   );
   const uniqueDestinations: { [key: string]: Patient[] } = getUniqueByProp(
     tripPatientsData,
-    "endAddress"
+    'endAddress',
   );
   const stopKeys = getKeys(uniqueStops);
   const destinationKeys = getKeys(uniqueDestinations);
   const sortedStopKeys: string[] = sortKeys(stopKeys).map((item) => item.key);
-  const sortedDestinationKeys: string[] = sortKeys(destinationKeys).map(
-    (item) => item.key
-  );
+  const sortedDestinationKeys: string[] = sortKeys(destinationKeys).map((item) => item.key);
 
   const filteredSortedStopKeys: string[] = sortedStopKeys?.filter(
-    (item) =>
-      !isEmpty(
-        uniqueStops?.[item]?.filter(
-          (item) => item?.state !== stateTypes.decline
-        )
-      )
+    (item) => !isEmpty(uniqueStops?.[item]?.filter((item) => item?.state !== stateTypes.decline)),
   );
 
   const filteredSortedDestinationKeys: string[] = sortedDestinationKeys?.filter(
     (item) =>
-      !isEmpty(
-        uniqueDestinations?.[item]?.filter(
-          (item) => item?.state !== stateTypes.decline
-        )
-      )
+      !isEmpty(uniqueDestinations?.[item]?.filter((item) => item?.state !== stateTypes.decline)),
   );
 
   const handleUpdateTrip = async (state: string) => {
     await updateState(updateTripMutation.mutateAsync, state, {
-      pavezejimas: id!
+      pavezejimas: id!,
     });
   };
 
@@ -100,14 +83,12 @@ const MultiTrip = ({
 
       if (
         !isDeclined &&
-        isEmpty(
-          tripPatientsData?.filter((item) => item.state !== stateTypes.decline)
-        )
+        isEmpty(tripPatientsData?.filter((item) => item.state !== stateTypes.decline))
       ) {
         await handleUpdateTrip(stateTypes.decline);
       } else if (state === stateTypes.approved) {
         const anyPatientsTaken = uniqueStops[sortedStopKeys[0]].some((item) =>
-          anyPatientsTakenTypes.includes(item.state)
+          anyPatientsTakenTypes.includes(item.state),
         );
 
         if (anyPatientsTaken) {
@@ -116,7 +97,7 @@ const MultiTrip = ({
         }
       } else if (state === stateTypes.start) {
         const allPatientsTaken = uniqueStops[sortedStopKeys[0]].every((item) =>
-          allPatientsTakenTypes.includes(item.state)
+          allPatientsTakenTypes.includes(item.state),
         );
 
         if (allPatientsTaken) {
@@ -132,7 +113,7 @@ const MultiTrip = ({
         if (allPatientsAtHome) {
           await handleUpdateTrip(stateTypes.tripEnd).then(async () => {
             await handleUpdateTrip(stateTypes.end);
-            dispatch(actions.setCurrentTrip(""));
+            dispatch(actions.setCurrentTrip(''));
           });
         }
       }
@@ -174,15 +155,14 @@ const MultiTrip = ({
             <>
               {sortedStopKeys.map((item, index) => {
                 const group = uniqueStops[item];
-                const previousGroup =
-                  uniqueStops?.[sortedStopKeys?.[index - 1]];
+                const previousGroup = uniqueStops?.[sortedStopKeys?.[index - 1]];
                 const firstGroupElement = group[0];
                 const coordinates = firstGroupElement.startCoordinates;
 
                 const isPreviousEnabled =
                   index !== 0 &&
                   previousGroup?.some((item) =>
-                    [stateTypes.approved, stateTypes.start].includes(item.state)
+                    [stateTypes.approved, stateTypes.start].includes(item.state),
                   );
 
                 const disabled =
@@ -193,7 +173,7 @@ const MultiTrip = ({
                       stateTypes.tripStart,
                       stateTypes.decline,
                       stateTypes.tripEnd,
-                      stateTypes.end
+                      stateTypes.end,
                     ].includes(item.state);
                   });
 
@@ -211,12 +191,9 @@ const MultiTrip = ({
               {filteredSortedDestinationKeys.map((item, index) => {
                 const group = uniqueDestinations[item];
 
-                const previousStopGroup =
-                  uniqueStops?.[filteredSortedStopKeys.slice(-1)[0]];
+                const previousStopGroup = uniqueStops?.[filteredSortedStopKeys.slice(-1)[0]];
                 const previousDestinationGroup =
-                  uniqueDestinations?.[
-                    filteredSortedDestinationKeys?.[index - 1]
-                  ];
+                  uniqueDestinations?.[filteredSortedDestinationKeys?.[index - 1]];
                 const firstGroupElement = group[0];
                 const coordinates = firstGroupElement.endAddress;
 
@@ -226,15 +203,13 @@ const MultiTrip = ({
                         stateTypes.approved,
                         stateTypes.start,
                         stateTypes.tripStart,
-                        stateTypes.tripEnd
+                        stateTypes.tripEnd,
                       ].includes(item.state);
                     })
                   : previousStopGroup.some((item) => {
-                      return [
-                        stateTypes.approved,
-                        stateTypes.start,
-                        stateTypes.end
-                      ].includes(item.state);
+                      return [stateTypes.approved, stateTypes.start, stateTypes.end].includes(
+                        item.state,
+                      );
                     });
 
                 const disabled =
@@ -242,18 +217,14 @@ const MultiTrip = ({
                   previousGroupEnabled ||
                   group.every(
                     (item) =>
-                      ![
-                        stateTypes.tripStart,
-                        stateTypes.decline,
-                        stateTypes.tripEnd
-                      ].includes(item.state)
+                      ![stateTypes.tripStart, stateTypes.decline, stateTypes.tripEnd].includes(
+                        item.state,
+                      ),
                   );
 
                 return (
                   <TripGroup
-                    group={group.filter(
-                      (item) => item.state !== stateTypes.decline
-                    )}
+                    group={group.filter((item) => item.state !== stateTypes.decline)}
                     disabled={disabled}
                     isLast={filteredSortedDestinationKeys.length - 1 === index}
                     address={firstGroupElement.endAddress}
