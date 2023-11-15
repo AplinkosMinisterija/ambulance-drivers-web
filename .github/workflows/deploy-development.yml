@@ -1,0 +1,19 @@
+name: Deploy to Development
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-development:
+    name: Deploy development
+    uses: AplinkosMinisterija/reusable-workflows/.github/workflows/biip-deploy.yml@main
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+    with:
+      environment: Development
+      docker-image: ghcr.io/AplinkosMinisterija/ambulance-drivers-web
+      build-args: REACT_APP_CLIENT_ID=8250078977a31f0d5733c53b501f7f69
+   
+      
