@@ -15,34 +15,6 @@ import { TripV1Server } from './types';
 
 const cookies = new Cookies();
 
-export const useTrackCurrentLocation = () => {
-  const [location, setLocation] = useState<any>(undefined);
-
-  useEffect(() => {
-    if (!navigator?.geolocation) return;
-
-    const interval = setInterval(
-      //@ts-ignore
-      (function init() {
-        navigator.geolocation.getCurrentPosition(
-          (location) => {
-            const { latitude, longitude } = location.coords;
-            setLocation({ lat: latitude, lng: longitude });
-          },
-          () => {
-            handleAlert(validationTexts.userDeniedLocation);
-          },
-          { enableHighAccuracy: true, maximumAge: 0 },
-        );
-      })(),
-      1000,
-    );
-
-    return () => clearInterval(interval);
-  }, []);
-  return location;
-};
-
 export const useCurrentLocation = () => {
   const [location, setLocation] = useState<{ lat?: number; lng?: number }>();
 
@@ -70,7 +42,6 @@ export const useDistanceAndTime = (coordinates: number[][]) => {
     ['distance', coordinates],
     () => api.getTripTimeAndDistance(newCoordinates),
     {
-      onError: () => {},
       enabled: !!newCoordinates?.[0]?.[0],
     },
   );

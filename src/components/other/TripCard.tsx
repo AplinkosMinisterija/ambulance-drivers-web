@@ -20,19 +20,19 @@ const TripCard = ({ trip, onClick, lastOfflineState, disabled = false }: FishSto
   const formattedDistance = getDistance(distance);
   const currentState = lastOfflineState || state;
 
-  const { data: tripPatients } = useQuery(['tripPatients', id], () => api.getTripPatients(id!), {});
+  const { data: tripPatients } = useQuery(['tripPatients', id], () => api.getTripPatients(id), {});
 
   const patients = getPatients(tripPatients?.value) as Patient[];
 
   const getUniqueStops = () => {
     const uniqueStopsCount: any = {};
 
-    uniqueStopsCount[startAddress!] = startAddress;
+    uniqueStopsCount[startAddress] = startAddress;
     uniqueStopsCount[endAddress] = endAddress;
 
     patients?.forEach((item) => {
       uniqueStopsCount[item?.startAddress] = item.startAddress;
-      uniqueStopsCount[item?.endAddress!] = item.endAddress;
+      uniqueStopsCount[item?.endAddress] = item.endAddress;
     });
 
     return Object.keys(uniqueStopsCount).length - 2;
@@ -46,7 +46,7 @@ const TripCard = ({ trip, onClick, lastOfflineState, disabled = false }: FishSto
       <IconContainer>
         <IconRow>
           <StyledText>{direction}</StyledText>
-          <InfoItem icon="user" value={patients?.length! || 1} />
+          <InfoItem icon="user" value={patients?.length || 1} />
           <InfoItem icon="distance" value={formattedDistance} />
         </IconRow>
       </IconContainer>

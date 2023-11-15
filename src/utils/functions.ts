@@ -148,10 +148,10 @@ export const handleGetCurrentLocation = async () => {
 
 export const getUniqueByProp = (data: any, prop: string) =>
   data?.reduce((prev: any, item: any) => {
-    if (prev[item?.[prop]!]) {
-      prev[item?.[prop]!].push(item);
+    if (prev[item?.[prop]]) {
+      prev[item?.[prop]].push(item);
     } else {
-      prev[item?.[prop]!] = [item];
+      prev[item?.[prop]] = [item];
     }
 
     return prev;
@@ -190,49 +190,49 @@ export const updateState = async (
   });
 };
 
-export const getPatient = (value?: string): Patient | {} => {
-  if (!value || isEmpty(value)) return {};
+export const getPatient = (value?: string): Patient | undefined => {
+  if (!value || isEmpty(value)) return;
 
   const parsedPatientJson: PatientServer = JSON.parse(value);
 
   return mapPatient(parsedPatientJson);
 };
 
-export const mapPatient = (patient?: PatientServer): Patient => {
+export const mapPatient = (patient: PatientServer): Patient => {
   return {
     fullName: patient?.vardas_pavarde || 'Nežinomas vardas',
-    id: patient?.pavezejimoElementoId!,
-    startDate: patient?.pavezejimoPradzia!,
-    endDate: patient?.pavezejimoPabaiga!,
-    phone: patient?.telefonas!,
-    sort: patient?.pavezejimoElementoNr!,
+    id: patient?.pavezejimoElementoId,
+    startDate: patient?.pavezejimoPradzia,
+    endDate: patient?.pavezejimoPabaiga,
+    phone: patient?.telefonas,
+    sort: patient?.pavezejimoElementoNr,
     startCoordinates: patient?.pradinioAdresoKoordinates,
     endCoordinates: patient?.galutinioAdresoKoordinates,
-    endAddress: patient?.galutinisAdresas!,
-    startAddress: patient?.paemimoAdresas!,
-    state: patient?.busena!,
+    endAddress: patient?.galutinisAdresas,
+    startAddress: patient?.paemimoAdresas,
+    state: patient?.busena,
   };
 };
-export const getPatients = (value?: string[]): ({} | Patient)[] => {
+export const getPatients = (value?: string[]): (undefined | Patient)[] => {
   if (!value || !Array.isArray(value)) return [];
 
   return value.map((patient) => getPatient(patient));
 };
 
-export const mapTrip = (trip?: TripV1Server): Trip => {
+export const mapTrip = (trip: TripV1Server): Trip => {
   return {
-    id: trip?.properties?.pavezejimoId!,
-    distance: trip?.properties?.atstumas!,
-    startAddress: trip?.properties?.pradinisAdresas!,
-    endAddress: trip?.properties?.galutinisAdresas!,
-    startCoordinates: trip?.properties?.pradinioAdresoKoordString!,
-    endCoordinates: trip?.properties?.galutinioAdresoKoordString!,
-    state: trip?.properties?.busena!,
-    date: trip?.properties?.data!,
-    phone: trip?.properties?.asmensTelefonoNumeris!,
-    startDate: trip?.properties?.pavezejimoPradzia!,
-    endDate: trip?.properties?.pavezejimoPabaiga!,
-    time: trip?.properties?.trukme!,
-    direction: trip?.properties?.kryptis!,
+    id: trip?.properties?.pavezejimoId,
+    distance: trip?.properties?.atstumas,
+    startAddress: trip?.properties?.pradinisAdresas,
+    endAddress: trip?.properties?.galutinisAdresas,
+    startCoordinates: trip?.properties?.pradinioAdresoKoordString,
+    endCoordinates: trip?.properties?.galutinioAdresoKoordString,
+    state: trip?.properties?.busena,
+    date: trip?.properties?.data,
+    phone: trip?.properties?.asmensTelefonoNumeris,
+    startDate: trip?.properties?.pavezejimoPradzia,
+    endDate: trip?.properties?.pavezejimoPabaiga,
+    time: trip?.properties?.trukme,
+    direction: trip?.properties?.kryptis,
   };
 };

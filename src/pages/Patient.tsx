@@ -27,14 +27,14 @@ import {
 import { Patient } from '../utils/types';
 
 const PatientPage = () => {
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
   const isOnline = useIsOnline();
 
   const { data: patientServer, isFetching } = useQuery(
     ['tripPatient', id],
-    () => api.getTripPatient(id!),
+    () => api.getTripPatient(id),
     {},
   );
 
@@ -64,7 +64,7 @@ const PatientPage = () => {
 
   const handleUpdateState = async (mutateAsync: any, state: string) => {
     updateState(mutateAsync, state, {
-      pavezejimo_elementas: id!,
+      pavezejimo_elementas: id,
     });
   };
 
@@ -119,7 +119,7 @@ const PatientPage = () => {
       </Header>
       <Content>
         <PatientName>{patient?.fullName}</PatientName>
-        <TripInfo properties={patient!} />
+        <TripInfo properties={patient} />
         <ActionContainer>
           <ActionCard
             icon={'phone'}
@@ -130,7 +130,7 @@ const PatientPage = () => {
             }}
           />
         </ActionContainer>
-        <ButtonContainer>{renderButton[currentState!]}</ButtonContainer>
+        <ButtonContainer>{renderButton[currentState]}</ButtonContainer>
         <DeleteCard
           visible={visible}
           title={deleteStateTitle.trip}

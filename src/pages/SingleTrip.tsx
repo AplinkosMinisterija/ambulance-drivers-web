@@ -14,6 +14,7 @@ import InfoItem from '../components/other/InfoItem';
 import LoaderComponent from '../components/other/LoaderComponent';
 import Tag from '../components/other/Tag';
 import TripInfo from '../components/other/TripInfo';
+import { actions } from '../state/currentTrip/reducer';
 import { device } from '../styles';
 import api, { getMapUrl } from '../utils/api';
 import { stateTypes } from '../utils/constants';
@@ -28,10 +29,9 @@ import {
   title,
 } from '../utils/texts';
 import { Trip } from '../utils/types';
-import { actions } from '../state/currentTrip/reducer';
 
 const SingleTrip = ({ trip }: { trip: Trip }) => {
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -39,7 +39,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
   const isOnline = useIsOnline();
 
   const [value, setValue] = useOfflineTrips();
-  let currentTrip = value?.[id!] ? [...value[id!]] : undefined;
+  let currentTrip = value?.[id] ? [...value[id]] : undefined;
   const currentTripState = currentTrip?.slice(-1)?.[0]?.state;
 
   const { mutateAsync: tripMutateAsync, isLoading: tripLoading } = useUpdateTrip(
@@ -60,7 +60,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
     if (isOnline) {
       await mutateAsync({
         parameters: {
-          pavezejimas: id!,
+          pavezejimas: id,
           busena: state,
           lat,
           long: lng,
@@ -72,7 +72,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
       } else {
         currentTrip = [{ state, lat, lng }];
       }
-      setValue({ ...value, [id!]: currentTrip });
+      setValue({ ...value, [id]: currentTrip });
     }
   };
 
@@ -117,8 +117,8 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
 
   const renderContent = () => {
     const button = isOnline
-      ? renderButton[trip?.state!]
-      : renderButton[currentTripState] || renderButton[trip?.state!];
+      ? renderButton[trip?.state]
+      : renderButton[currentTripState] || renderButton[trip?.state];
 
     if (button) {
       return button;
@@ -141,8 +141,8 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
 
   const mapUrl = getMapUrl(
     `${location?.lat},${location?.lng}`,
-    trip?.endCoordinates!,
-    trip?.startCoordinates!,
+    trip?.endCoordinates,
+    trip?.startCoordinates,
   );
 
   const asmensTelefonoNumeris = trip?.phone;
@@ -151,7 +151,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
   const time = trip?.time;
 
   const formattedDistance = getDistance(distance);
-  const duration = secondsToHHMMSS(time!);
+  const duration = secondsToHHMMSS(time);
   const showDeleteButton = [stateTypes.tripStart, stateTypes.start].some((item) =>
     [state, currentTripState].includes(item),
   );
@@ -188,7 +188,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
             </IconRow>
           </Row>
 
-          <TripInfo properties={trip!} />
+          <TripInfo properties={trip} />
           <ActionContainer>
             <ActionCard
               icon={'phone'}

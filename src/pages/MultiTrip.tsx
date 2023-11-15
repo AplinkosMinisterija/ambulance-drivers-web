@@ -31,7 +31,7 @@ const anyPatientsTakenTypes = [stateTypes.start, stateTypes.decline];
 const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
 
 const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: Patient[] }) => {
-  const { id } = useParams();
+  const { id = "" } = useParams();
   const dispatch = useDispatch();
 
   const queryClient = useQueryClient();
@@ -68,13 +68,13 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
 
   const handleUpdateTrip = async (state: string) => {
     await updateState(updateTripMutation.mutateAsync, state, {
-      pavezejimas: id!,
+      pavezejimas: id,
     });
   };
 
   const state = trip?.state;
   const distance = getDistance(trip?.distance);
-  const duration = secondsToHHMMSS(trip?.time!);
+  const duration = secondsToHHMMSS(trip?.time);
   const isDeclined = state === stateTypes.decline;
 
   useEffect(() => {
@@ -140,7 +140,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
             <Tag text={state} />
             <IconRow>
               <StyledText>{trip?.direction}</StyledText>
-              <InfoItem icon="user" value={tripPatientsData?.length!} />
+              <InfoItem icon="user" value={tripPatientsData?.length} />
               <IcoInnerRow>
                 <InfoItem icon="distance" value={distance} />
                 <Line />

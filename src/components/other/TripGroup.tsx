@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { slugs } from '../../App';
-import { actions } from '../../state/currentTrip/reducer';
 import api, { getMapUrl } from '../../utils/api';
 import { stateTypes } from '../../utils/constants';
 import { formatTime, handleGetCurrentLocation, updateState } from '../../utils/functions';
@@ -63,7 +61,7 @@ const TripGroup = ({
     await Promise.all(
       group.map(async (item) => {
         await updateState(updatePatientTrip.mutateAsync, updateStateType, {
-          pavezejimo_elementas: item.id!,
+          pavezejimo_elementas: item.id,
         });
       }),
     );
@@ -134,8 +132,8 @@ const TripGroup = ({
               return (
                 <PatientCard
                   state={item.state}
-                  name={item?.fullName!}
-                  onClick={() => navigate(slugs.patient(item?.id!))}
+                  name={item?.fullName}
+                  onClick={() => navigate(slugs.patient(item?.id))}
                 />
               );
             })}
@@ -208,27 +206,27 @@ const Column2 = styled.div`
   margin-bottom: 45px;
 `;
 
-export const InnerColumn = styled.div`
+ const InnerColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 2px;
 `;
 
-export const Time = styled.div`
+ const Time = styled.div`
   font-size: 1.8rem;
   color: #1a202c;
   font-weight: bold;
   line-height: 10px;
 `;
 
-export const Location = styled.div`
+ const Location = styled.div`
   font-weight: bold;
   font-size: 1.4rem;
   color: #595e66;
 `;
 
-export const Circle = styled.div`
+ const Circle = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -236,12 +234,12 @@ export const Circle = styled.div`
   opacity: 1;
 `;
 
-export const DottedLine = styled.div`
+ const DottedLine = styled.div`
   height: 100%;
   border-left: 1px dashed #1a202c66;
 `;
 
-export const LocationIcon = styled(Icon)`
+ const LocationIcon = styled(Icon)`
   margin-left: -4px;
   color: #7fb519;
   font-size: 2.3rem;
