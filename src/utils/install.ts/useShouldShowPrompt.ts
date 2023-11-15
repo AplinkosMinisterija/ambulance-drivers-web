@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import moment from 'moment';
+import { useState } from 'react';
 
 const getInstallPromptLastSeenAt = (promptName: string): string =>
-  localStorage.getItem(promptName)!;
+  localStorage.getItem(promptName) || '';
 
 const setInstallPromptSeenToday = (promptName: string): void => {
   const today = moment().toISOString();

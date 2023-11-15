@@ -11,31 +11,32 @@ import MultiTrip from './MultiTrip';
 import SingleTrip from './SingleTrip';
 
 const Trip = () => {
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const navigate = useNavigate();
-  const { data: tripServer, isFetching } = useQuery(['trip', id], () => api.trip(id!), {
+  const { data: tripServer, isFetching } = useQuery(['trip', id], () => api.trip(id), {
     onError: () => {
       navigate(slugs.trips);
     },
   });
-  const trip = mapTrip(tripServer);
 
   const { data: tripPatients, isFetching: patientFetching } = useQuery(
     ['tripPatients', id],
-    () => api.getTripPatients(id!),
+    () => api.getTripPatients(id),
     {},
   );
 
   const patients = getPatients(tripPatients?.value) as Patient[];
 
-  if (isFetching || patientFetching) return <LoaderComponent />;
+  if (isFetching || patientFetching || !tripServer) return <LoaderComponent />;
+
+  const trip = mapTrip(tripServer);
 
   return (
     <DefaultLayout maxWidth="800px">
       {isEmpty(patients) ? (
-        <SingleTrip trip={trip!} />
+        <SingleTrip trip={trip} />
       ) : (
-        <MultiTrip trip={trip!} tripPatientsData={patients} />
+        <MultiTrip trip={trip} tripPatientsData={patients} />
       )}
     </DefaultLayout>
   );

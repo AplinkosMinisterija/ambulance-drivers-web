@@ -50,7 +50,7 @@ interface Create {
   id?: string;
 }
 
-const clientID = process.env.REACT_APP_CLIENT_ID!;
+const clientID = process.env.REACT_APP_CLIENT_ID || '';
 const palantirProxy = '/proxy/palantir';
 const distanceProxy = '/proxy/distance';
 
@@ -98,7 +98,7 @@ class Api {
 
     this.AuthApiAxios.interceptors.request.use(
       (config) => {
-        config.headers!.Authorization = 'Bearer ' + cookies.get('token');
+        config.headers.Authorization = 'Bearer ' + cookies.get('token');
 
         return config;
       },

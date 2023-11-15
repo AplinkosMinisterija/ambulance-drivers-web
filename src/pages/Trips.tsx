@@ -24,7 +24,7 @@ const Trips = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dateValue = searchParams.get('date') as string;
   const user = useAppSelector((state) => state.user.userData);
-  const [date, setDate] = useState(dateValue || new Date());
+  const [date, setDate] = useState<Date | string | undefined>(dateValue || new Date());
   const isOnline = useIsOnline();
   const [value] = useOfflineTrips();
   const currentTripId = useAppSelector((state) => state.currentTripId);
@@ -90,7 +90,7 @@ const Trips = () => {
       );
     }
 
-    const mappedTrips = data?.data.map((item) => mapTrip(item))!;
+    const mappedTrips = data?.data.map((item) => mapTrip(item)) || [];
 
     const isDisabledTrip = (trip: Trip) => {
       if (!currentTripId) return;
@@ -103,7 +103,7 @@ const Trips = () => {
         {mappedTrips
           .filter((item) => item.state !== 'Atšauktas')
           ?.map((trip) => {
-            const offlineTrip = value?.[trip?.id!] ? [...value[trip?.id!]] : undefined;
+            const offlineTrip = value?.[trip?.id] ? [...value[trip?.id]] : undefined;
 
             return (
               <TripCard
@@ -135,7 +135,7 @@ const Trips = () => {
           disabled={!isOnline}
           value={date}
           onChange={(date) => {
-            setDate(date!);
+            setDate(date);
           }}
         />
         {renderContent()}

@@ -1,9 +1,17 @@
+import * as Sentry from '@sentry/react';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import {
+  BrowserRouter,
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType,
+} from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 import App from './App';
@@ -13,6 +21,28 @@ import redux from './state/store';
 import { GlobalStyle, theme } from './styles/index';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const { store, persistor } = redux;
+
+const env = process.env;
+
+if (env.REACT_APP_SENTRY_DSN) {
+  Sentry.init({
+    environment: env.REACT_APP_ENVIRONMENT,
+    dsn: env.REACT_APP_SENTRY_DSN,
+    integrations: [
+      new Sentry.BrowserTracing({
+        routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+          useEffect,
+          useLocation,
+          useNavigationType,
+          createRoutesFromChildren,
+          matchRoutes,
+        ),
+      }),
+    ],
+    tracesSampleRate: 1,
+    release: env.REACT_APP_VERSION,
+  });
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
