@@ -15,4 +15,7 @@ jobs:
     with:
       environment: Staging
       docker-image: ghcr.io/AplinkosMinisterija/ambulance-drivers-web
-      build-args: REACT_APP_CLIENT_ID=8250078977a31f0d5733c53b501f7f69
+      enable-sentry: true
+      build-args: | 
+        REACT_APP_SENTRY_DSN=https://856d293179cc436aa50e9bb58b606067@sentry.biip.lt/45
+        REACT_APP_CLIENT_ID=8250078977a31f0d5733c53b501f7f69
