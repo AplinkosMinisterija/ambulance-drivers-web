@@ -50,7 +50,8 @@ interface Create {
   id?: string;
 }
 
-const clientID = process.env.REACT_APP_CLIENT_ID || '';
+const clientID = process.env.REACT_APP_CLIENT_ID;
+
 const palantirProxy = '/proxy/palantir';
 const distanceProxy = '/proxy/distance';
 
@@ -76,6 +77,8 @@ const offlineScope = 'offline_access';
 const scope = `${getScope} ${postScope} ${offlineScope}`;
 
 export const geLoginUrl = () => {
+  if (!clientID) return '';
+
   const baseURL = Resources.PALANTIR_SIGN;
   const url = new URL(baseURL);
   const params = new URLSearchParams(url.search);
