@@ -31,7 +31,7 @@ const anyPatientsTakenTypes = [stateTypes.start, stateTypes.decline];
 const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
 
 const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: Patient[] }) => {
-  const { id = "" } = useParams();
+  const { id = '' } = useParams();
   const dispatch = useDispatch();
 
   const queryClient = useQueryClient();
@@ -93,7 +93,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
 
         if (anyPatientsTaken) {
           dispatch(actions.setCurrentTrip(id));
-          await handleUpdateTrip(stateTypes.tripStart);
+          await handleUpdateTrip(stateTypes.start);
         }
       } else if (state === stateTypes.start) {
         const allPatientsTaken = uniqueStops[sortedStopKeys[0]].every((item) =>
