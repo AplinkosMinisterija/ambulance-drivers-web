@@ -86,6 +86,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
         isEmpty(tripPatientsData?.filter((item) => item.state !== stateTypes.decline))
       ) {
         await handleUpdateTrip(stateTypes.decline);
+        dispatch(actions.setCurrentTrip(''));
       } else if (state === stateTypes.approved) {
         const anyPatientsTaken = uniqueStops[sortedStopKeys[0]].some((item) =>
           anyPatientsTakenTypes.includes(item.state),

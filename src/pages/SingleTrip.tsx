@@ -219,6 +219,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
           }}
           handleDelete={async () => {
             await handleUpdateState(declineTripMutation.mutateAsync, stateTypes.decline);
+            dispatch(actions.setCurrentTrip(''));
 
             setVisible(false);
           }}
