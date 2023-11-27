@@ -14,6 +14,7 @@ jobs:
     with:
       environment: Development
       docker-image: ghcr.io/AplinkosMinisterija/ambulance-drivers-web
+      runs-on: biip-workflows
       enable-sentry: true
       build-args: | 
         VITE_SENTRY_DSN=https://856d293179cc436aa50e9bb58b606067@sentry.biip.lt/45
