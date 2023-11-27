@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
@@ -33,6 +33,7 @@ const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
 const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: Patient[] }) => {
   const { id = '' } = useParams();
   const dispatch = useDispatch();
+  const [currentGroupAddress, setCurrentGroupAddress] = useState('');
 
   const queryClient = useQueryClient();
   const isOnline = useIsOnline();
@@ -123,6 +124,19 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, sortedStopKeys, uniqueStops]);
 
+  useEffect(() => {
+    sortedStopKeys.forEach((key) => {
+      if (uniqueStops[key].every((item) => allPatientsTakenTypes.includes(item.state))) {
+        setCurrentGroupAddress(key);
+      }
+    });
+    filteredSortedDestinationKeys.forEach((key) => {
+      if (uniqueDestinations[key].every((item) => allPatientsAtHomeTypes.includes(item.state))) {
+        setCurrentGroupAddress(key);
+      }
+    });
+  }, [sortedStopKeys, uniqueStops]);
+
   if (updateTripMutation.isLoading) return <LoaderComponent />;
 
   return (
@@ -154,29 +168,11 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
             <DisableText text={formLabels.tripDeclined} />
           ) : (
             <>
-              {sortedStopKeys.map((item, index) => {
-                const group = uniqueStops[item];
-                const previousGroup = uniqueStops?.[sortedStopKeys?.[index - 1]];
+              {sortedStopKeys.map((key) => {
+                const group = uniqueStops[key];
                 const firstGroupElement = group[0];
                 const coordinates = firstGroupElement.startCoordinates;
-
-                const isPreviousEnabled =
-                  index !== 0 &&
-                  previousGroup?.some((item) =>
-                    [stateTypes.approved, stateTypes.start].includes(item.state),
-                  );
-
-                const disabled =
-                  !isOnline ||
-                  isPreviousEnabled ||
-                  group.every((item) => {
-                    return [
-                      stateTypes.tripStart,
-                      stateTypes.decline,
-                      stateTypes.tripEnd,
-                      stateTypes.end,
-                    ].includes(item.state);
-                  });
+                const disabled = !isOnline || key == currentGroupAddress;
 
                 return (
                   <TripGroup
@@ -189,39 +185,11 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
                 );
               })}
 
-              {filteredSortedDestinationKeys.map((item, index) => {
-                const group = uniqueDestinations[item];
-
-                const previousStopGroup = uniqueStops?.[filteredSortedStopKeys.slice(-1)[0]];
-                const previousDestinationGroup =
-                  uniqueDestinations?.[filteredSortedDestinationKeys?.[index - 1]];
+              {filteredSortedDestinationKeys.map((key, index) => {
+                const group = uniqueDestinations[key];
                 const firstGroupElement = group[0];
-                const coordinates = firstGroupElement.endAddress;
-
-                const previousGroupEnabled = previousDestinationGroup
-                  ? previousDestinationGroup.some((item) => {
-                      return [
-                        stateTypes.approved,
-                        stateTypes.start,
-                        stateTypes.tripStart,
-                        stateTypes.tripEnd,
-                      ].includes(item.state);
-                    })
-                  : previousStopGroup.some((item) => {
-                      return [stateTypes.approved, stateTypes.start, stateTypes.end].includes(
-                        item.state,
-                      );
-                    });
-
-                const disabled =
-                  !isOnline ||
-                  previousGroupEnabled ||
-                  group.every(
-                    (item) =>
-                      ![stateTypes.tripStart, stateTypes.decline, stateTypes.tripEnd].includes(
-                        item.state,
-                      ),
-                  );
+                const coordinates = firstGroupElement.endCoordinates;
+                const disabled = !isOnline || key == currentGroupAddress;
 
                 return (
                   <TripGroup

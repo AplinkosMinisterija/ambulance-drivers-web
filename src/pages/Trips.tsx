@@ -15,7 +15,7 @@ import TripCard from '../components/other/TripCard';
 import { useAppSelector } from '../state/hooks';
 import { device } from '../styles';
 import api from '../utils/api';
-import { formatDateFrom, formatDateTo, handleAlertFromServer, mapTrip } from '../utils/functions';
+import { formatDateFrom, handleAlertFromServer, mapTrip } from '../utils/functions';
 import { useIsOnline, useLogout, useOfflineTrips } from '../utils/hooks';
 import { emptyStateDescriptions, emptyStateTitle } from '../utils/texts';
 import { Trip } from '../utils/types';
@@ -45,21 +45,21 @@ const Trips = () => {
     query: {
       type: 'and',
       value: [
-        {
-          type: 'gte',
-          field: 'properties.data',
-          value: formatDateFrom(dateValue),
-        },
-        {
-          type: 'lte',
-          field: 'properties.data',
-          value: formatDateTo(dateValue),
-        },
-        {
-          type: 'eq',
-          field: 'properties.vairuotojoId',
-          value: user.id,
-        },
+        // {
+        //   type: 'gte',
+        //   field: 'properties.data',
+        //   value: formatDateFrom(dateValue),
+        // },
+        // {
+        //   type: 'lte',
+        //   field: 'properties.data',
+        //   value: formatDateTo(dateValue),
+        // },
+        // {
+        //   type: 'eq',
+        //   field: 'properties.vairuotojoId',
+        //   value: user.id,
+        // },
       ],
     },
     orderBy: {
