@@ -58,10 +58,6 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
   const sortedStopKeys: string[] = sortKeys(stopKeys).map((item) => item.key);
   const sortedDestinationKeys: string[] = sortKeys(destinationKeys).map((item) => item.key);
 
-  const filteredSortedStopKeys: string[] = sortedStopKeys?.filter(
-    (item) => !isEmpty(uniqueStops?.[item]?.filter((item) => item?.state !== stateTypes.decline)),
-  );
-
   const filteredSortedDestinationKeys: string[] = sortedDestinationKeys?.filter(
     (item) =>
       !isEmpty(uniqueDestinations?.[item]?.filter((item) => item?.state !== stateTypes.decline)),
