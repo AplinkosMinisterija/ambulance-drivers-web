@@ -10,7 +10,7 @@ RUN yarn install --frozen-lockfile
 # Copy source
 COPY . .
 
-ARG REACT_APP_CLIENT_ID=
+ARG VITE_CLIENT_ID=
 
 # Build and cleanup
 RUN yarn build

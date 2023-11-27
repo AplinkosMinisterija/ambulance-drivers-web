@@ -50,10 +50,9 @@ interface Create {
   id?: string;
 }
 
-const clientID = process.env.REACT_APP_CLIENT_ID;
+const clientID = import.meta.env.VITE_CLIENT_ID;
 
-const palantirProxy = '/proxy/palantir';
-const distanceProxy = '/proxy/distance';
+const palantirProxy = '/api';
 
 export const getMapUrl = (start: string, destination: string, stop?: string) => {
   const baseURL = 'https://www.google.com/maps/dir/';
@@ -237,22 +236,6 @@ class Api {
         refresh_token: cookies.get('refreshToken'),
       },
       config,
-    });
-  };
-
-  getTripTimeAndDistance = async (coordinates: number[][]): Promise<any> => {
-    const mappedCoordinates = coordinates
-      .map((coordinate) =>
-        coordinate
-          .reverse()
-          .map((c) => c)
-          .join(','),
-      )
-      .join(';');
-
-    return this.get({
-      resource:
-        distanceProxy + `/route/v1/driving/${mappedCoordinates}?overview=full&geometries=geojson`,
     });
   };
 }
