@@ -8,7 +8,7 @@ on:
 jobs:
   validate-docker-build:
     name: Validate if docker image builds
-    runs-on: biip-workflows
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
