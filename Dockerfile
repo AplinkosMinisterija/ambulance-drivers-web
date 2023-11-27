@@ -10,7 +10,7 @@ RUN yarn install --frozen-lockfile
 # Copy source
 COPY . .
 
-ARG REACT_APP_CLIENT_ID=
+ARG VITE_CLIENT_ID=
 
 # Build and cleanup
 RUN yarn build
@@ -31,4 +31,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget -
 COPY ./caddy/Caddyfile /etc/caddy/Caddyfile
 
 # Copy built files from the build stage
-COPY --from=build /app/build /srv
+COPY --from=build /app/dist /srv

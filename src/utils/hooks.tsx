@@ -31,38 +31,6 @@ export const useCurrentLocation = () => {
   return location;
 };
 
-export const useDistanceAndTime = (coordinates: number[][]) => {
-  const newCoordinates = cloneDeep(coordinates);
-
-  const [info, setInfo] = useState<any>({
-    distance: undefined,
-    time: undefined,
-  });
-  const { data } = useQuery(
-    ['distance', coordinates],
-    () => api.getTripTimeAndDistance(newCoordinates),
-    {
-      enabled: !!newCoordinates?.[0]?.[0],
-    },
-  );
-
-  useEffect(() => {
-    if (data?.routes[0]?.duration) {
-      const duration = intervalToDuration({
-        start: 0,
-        end: data?.routes[0]?.duration * 1000,
-      });
-
-      setInfo({
-        distance: `${(data?.routes[0]?.distance / 1000).toFixed(2)} km`,
-        time: `${duration.hours}:${duration.minutes}`,
-      });
-    }
-  }, [data?.routes]);
-
-  return info;
-};
-
 export const useDistanceAndDuration = (properties: TripV1Server['properties']) => {
   const duration = intervalToDuration({
     start: properties?.pavezejimoPradzia,
