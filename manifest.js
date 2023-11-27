@@ -2,9 +2,9 @@ export const manifestForPlugIn = {
   registerType: 'prompt',
   includeAssests: ['favicon.ico', 'apple-touc-icon.png', 'masked-icon.svg'],
   manifest: {
-    name: 'Žvejyba',
-    short_name: 'biip',
-    description: 'Biip - žvejybos modulis',
+    name: 'Pavežėjai',
+    short_name: 'Pavežėjai',
+    description: 'Pavežėjai',
     icons: [
       {
         src: '/android-chrome-192x192.png',
