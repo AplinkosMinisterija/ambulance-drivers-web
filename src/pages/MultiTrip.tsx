@@ -26,7 +26,12 @@ import {
 import { useIsOnline } from '../utils/hooks';
 import { formLabels, title } from '../utils/texts';
 import { Patient, Trip } from '../utils/types';
-const allPatientsTakenTypes = [stateTypes.tripStart, stateTypes.decline];
+const allPatientsTakenTypes = [
+  stateTypes.tripStart,
+  stateTypes.decline,
+  stateTypes.tripEnd,
+  stateTypes.end,
+];
 const anyPatientsTakenTypes = [stateTypes.start, stateTypes.decline];
 const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
 
@@ -121,16 +126,28 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
   }, [state, sortedStopKeys, uniqueStops]);
 
   useEffect(() => {
-    sortedStopKeys.forEach((key) => {
+    setCurrentGroupAddress(sortedStopKeys[0]);
+    const allPatientsTaken = sortedStopKeys.every((key, index) => {
       if (uniqueStops[key].every((item) => allPatientsTakenTypes.includes(item.state))) {
-        setCurrentGroupAddress(key);
+        const nextAddress = sortedStopKeys?.[index + 1];
+        if (!!nextAddress) {
+          setCurrentGroupAddress(nextAddress);
+        }
+        return true;
       }
     });
-    filteredSortedDestinationKeys.forEach((key) => {
-      if (uniqueDestinations[key].every((item) => allPatientsAtHomeTypes.includes(item.state))) {
-        setCurrentGroupAddress(key);
-      }
-    });
+    if (allPatientsTaken) {
+      setCurrentGroupAddress(filteredSortedDestinationKeys[0]);
+      filteredSortedDestinationKeys.forEach((key, index) => {
+        if (uniqueDestinations[key].every((item) => allPatientsAtHomeTypes.includes(item.state))) {
+          const nextAddress = sortedStopKeys?.[index + 1];
+          setCurrentGroupAddress('');
+          if (!!nextAddress) {
+            setCurrentGroupAddress(nextAddress);
+          }
+        }
+      });
+    }
   }, [sortedStopKeys, uniqueStops]);
 
   if (updateTripMutation.isLoading) return <LoaderComponent />;
@@ -168,7 +185,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
                 const group = uniqueStops[key];
                 const firstGroupElement = group[0];
                 const coordinates = firstGroupElement.startCoordinates;
-                const disabled = !isOnline || key == currentGroupAddress;
+                const disabled = !isOnline || key !== currentGroupAddress;
 
                 return (
                   <TripGroup
@@ -185,7 +202,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
                 const group = uniqueDestinations[key];
                 const firstGroupElement = group[0];
                 const coordinates = firstGroupElement.endCoordinates;
-                const disabled = !isOnline || key == currentGroupAddress;
+                const disabled = !isOnline || key !== currentGroupAddress;
 
                 return (
                   <TripGroup
