@@ -145,7 +145,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
     trip?.startCoordinates,
   );
 
-  const asmensTelefonoNumeris = trip?.phone;
+  const phone = trip?.phone;
   const state = trip?.state;
   const distance = trip?.distance;
   const time = trip?.time;
@@ -195,7 +195,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
               text={buttonsTitles.callPatient}
               onClick={() => {
                 //@ts-ignore
-                window.location = `tel:+${asmensTelefonoNumeris}`;
+                window.location = `tel:+${phone}`;
               }}
             />
 
