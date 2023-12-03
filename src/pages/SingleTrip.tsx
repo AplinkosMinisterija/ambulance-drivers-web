@@ -195,7 +195,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
               text={buttonsTitles.callPatient}
               onClick={() => {
                 //@ts-ignore
-                window.location = `tel:${asmensTelefonoNumeris}`;
+                window.location = `tel:+${asmensTelefonoNumeris}`;
               }}
             />
 

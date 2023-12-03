@@ -126,7 +126,7 @@ const PatientPage = () => {
             text={buttonsTitles.callPatient}
             onClick={() => {
               //@ts-ignore
-              window.location = `tel:${patient.phone}`;
+              window.location = `tel:+${patient.phone}`;
             }}
           />
         </ActionContainer>
