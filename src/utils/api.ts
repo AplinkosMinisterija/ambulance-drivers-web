@@ -52,8 +52,6 @@ interface Create {
 
 const clientID = import.meta.env.VITE_CLIENT_ID;
 
-const palantirProxy = '/api';
-
 export const getMapUrl = (start: string, destination: string, stop?: string) => {
   const baseURL = 'https://www.google.com/maps/dir/';
   const url = new URL(baseURL);
@@ -94,6 +92,7 @@ export const geLoginUrl = () => {
 
 class Api {
   private AuthApiAxios: AxiosInstance;
+  private readonly proxy = '/proxy/palantir';
 
   constructor() {
     this.AuthApiAxios = Axios.create();
@@ -101,6 +100,8 @@ class Api {
     this.AuthApiAxios.interceptors.request.use(
       (config) => {
         config.headers.Authorization = 'Bearer ' + cookies.get('token');
+
+        config.url = this.proxy + config.url;
 
         return config;
       },
@@ -123,7 +124,7 @@ class Api {
     };
 
     return this.errorWrapper(() =>
-      this.AuthApiAxios.get(`${resource}${id ? `/${id}` : ''}`, config),
+      this.AuthApiAxios.get(`/${resource}${id ? `/${id}` : ''}`, config),
     );
   };
 
@@ -135,53 +136,53 @@ class Api {
     };
 
     return this.errorWrapper(() =>
-      this.AuthApiAxios.get(`${resource}${id ? `/${id}` : ''}`, config),
+      this.AuthApiAxios.get(`/${resource}${id ? `/${id}` : ''}`, config),
     );
   };
 
   patch = async ({ resource, id, params }: UpdateOne) => {
     return this.errorWrapper(() =>
-      this.AuthApiAxios.patch(`${resource}/${id ? `/${id}` : ''}`, params),
+      this.AuthApiAxios.patch(`/${resource}/${id ? `/${id}` : ''}`, params),
     );
   };
 
   post = async ({ resource, id, params, config = {} }: Create) => {
     return this.errorWrapper(() =>
-      this.AuthApiAxios.post(`${resource}${id ? `/${id}` : ''}`, params, config),
+      this.AuthApiAxios.post(`/${resource}${id ? `/${id}` : ''}`, params, config),
     );
   };
 
   trips = async (params: any): Promise<{ data: TripV1Server[] }> => {
     return this.post({
-      resource: palantirProxy + Resources.TRIPS,
+      resource: Resources.TRIPS,
       params,
     });
   };
 
   trip = async (id: string): Promise<TripV1Server> => {
     return this.getOne({
-      resource: palantirProxy + Resources.TRIP,
+      resource: Resources.TRIP,
       id,
     });
   };
 
   updateTrip = async (params: any): Promise<TripV1Server> => {
     return this.post({
-      resource: palantirProxy + Resources.UPDATE_TRIP,
+      resource: Resources.UPDATE_TRIP,
       params,
     });
   };
 
   updatePatientTrip = async (params: any): Promise<TripV1Server> => {
     return this.post({
-      resource: palantirProxy + Resources.UPDATE_PATIENT_TRIP,
+      resource: Resources.UPDATE_PATIENT_TRIP,
       params,
     });
   };
 
   getTripPatients = async (id: string): Promise<{ value: string[] }> => {
     return this.post({
-      resource: palantirProxy + Resources.TRIP_PATIENTS,
+      resource: Resources.TRIP_PATIENTS,
       params: {
         parameters: { pavezejimo_id: id },
       },
@@ -189,7 +190,7 @@ class Api {
   };
   getTripPatient = async (id: string): Promise<{ value: string }> => {
     return this.post({
-      resource: palantirProxy + Resources.TRIP_PATIENT,
+      resource: Resources.TRIP_PATIENT,
       params: {
         parameters: { elemento_id: id },
       },
@@ -198,7 +199,7 @@ class Api {
 
   userInfo = async () => {
     return this.get({
-      resource: palantirProxy + Resources.ME,
+      resource: Resources.ME,
     });
   };
 
@@ -210,7 +211,7 @@ class Api {
     };
 
     return this.post({
-      resource: palantirProxy + Resources.PALANTIR_LOGIN,
+      resource: Resources.PALANTIR_LOGIN,
       params: {
         grant_type: 'authorization_code',
         code,
@@ -228,7 +229,7 @@ class Api {
     };
 
     return this.post({
-      resource: palantirProxy + Resources.PALANTIR_LOGIN,
+      resource: Resources.PALANTIR_LOGIN,
       params: {
         grant_type: 'refresh_token',
         client_id: clientID,
