@@ -136,11 +136,14 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
         return true;
       }
     });
+
     if (allPatientsTaken) {
       setCurrentGroupAddress(filteredSortedDestinationKeys[0]);
+
       filteredSortedDestinationKeys.forEach((key, index) => {
         if (uniqueDestinations[key].every((item) => allPatientsAtHomeTypes.includes(item.state))) {
-          const nextAddress = sortedStopKeys?.[index + 1];
+          const nextAddress = filteredSortedDestinationKeys?.[index + 1];
+
           setCurrentGroupAddress('');
           if (!!nextAddress) {
             setCurrentGroupAddress(nextAddress);
