@@ -68,6 +68,8 @@ function App() {
   useEffect(() => {
     const startWakeLock = async () => {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // @ts-ignore
         if ('wakeLock' in navigator && navigator?.wakeLock?.request) {
           // @ts-ignore
