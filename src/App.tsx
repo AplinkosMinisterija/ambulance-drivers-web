@@ -72,7 +72,6 @@ function App() {
         if ('wakeLock' in navigator && navigator?.wakeLock?.request) {
           // @ts-ignore
           wakeLockRef.current = await navigator.wakeLock.request('screen');
-          console.log('Wake Lock is active');
           setSu('success');
         }
       } catch (err: any) {
@@ -82,9 +81,12 @@ function App() {
     };
     startWakeLock();
 
-    return () => wakeLockRef?.current?.release();
-    // @ts-ignore
-  }, [navigator?.wakeLock]);
+    return () => {
+      if (wakeLockRef?.current) {
+        wakeLockRef.current.release();
+      }
+    };
+  }, []);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
