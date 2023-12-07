@@ -18,6 +18,7 @@ import { ServerErrorCodes } from './utils/constants';
 import {
   generateCodeChallengeFromVerifier,
   generateCodeVerifier,
+  handleAlert,
   handleAlertFromServer,
   handleSetTokens,
 } from './utils/functions';
@@ -62,6 +63,7 @@ function App() {
   const [value, setValue] = useOfflineTrips();
   const wakeLockRef = useRef<any>(null);
   const [err, setErr] = useState('');
+  const [su, setSu] = useState('');
 
   useEffect(() => {
     const startWakeLock = async () => {
@@ -71,8 +73,10 @@ function App() {
           // @ts-ignore
           wakeLockRef.current = await navigator.wakeLock.request('screen');
           console.log('Wake Lock is active');
+          setSu('success');
         }
       } catch (err: any) {
+        handleAlert();
         setErr(JSON.stringify(err));
       }
     };
@@ -190,7 +194,8 @@ function App() {
 
   return (
     <>
-      {err && <div>{err}</div>}
+      {err && <div>err:{err}</div>}
+      {su && <div>{su}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
