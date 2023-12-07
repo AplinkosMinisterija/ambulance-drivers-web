@@ -71,7 +71,7 @@ function App() {
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         // @ts-ignore
-        if ('wakeLock' in navigator && navigator?.wakeLock?.request) {
+        if (!!navigator?.wakeLock?.request) {
           // @ts-ignore
           wakeLockRef.current = await navigator.wakeLock.request('screen');
           setSu('success');
