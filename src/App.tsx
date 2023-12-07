@@ -68,7 +68,7 @@ function App() {
   useEffect(() => {
     const startWakeLock = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        //  await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // @ts-ignore
         if ('wakeLock' in navigator && navigator?.wakeLock?.request) {
@@ -88,7 +88,8 @@ function App() {
         wakeLockRef.current.release();
       }
     };
-  }, []);
+    // @ts-ignore
+  }, [navigator?.wakeLock?.request]);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
