@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isEmpty, isEqual } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, Route, Routes, useSearchParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -60,6 +60,25 @@ function App() {
   const queryClient = useQueryClient();
   const isOnline = useIsOnline(false);
   const [value, setValue] = useOfflineTrips();
+  const wakeLockRef = useRef<any>(null);
+
+  useEffect(() => {
+    const startWakeLock = async () => {
+      try {
+        // @ts-ignore
+        if ('wakeLock' in navigator && navigator.wakeLock.request) {
+          // @ts-ignore
+          wakeLockRef.current = await navigator.wakeLock.request('screen');
+          console.log('Wake Lock is active');
+        }
+      } catch (err: any) {
+        console.error(`err: ${err?.message}`);
+      }
+    };
+    startWakeLock();
+
+    return () => wakeLockRef?.current?.release();
+  }, []);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
