@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isEmpty, isEqual } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, Route, Routes, useSearchParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -61,6 +61,7 @@ function App() {
   const isOnline = useIsOnline(false);
   const [value, setValue] = useOfflineTrips();
   const wakeLockRef = useRef<any>(null);
+  const [err, setErr] = useState('');
 
   useEffect(() => {
     const startWakeLock = async () => {
@@ -72,7 +73,7 @@ function App() {
           console.log('Wake Lock is active');
         }
       } catch (err: any) {
-        console.error(`err: ${err?.message}`);
+        setErr(JSON.stringify(err));
       }
     };
     startWakeLock();
@@ -189,6 +190,7 @@ function App() {
 
   return (
     <>
+      {err && <div>{err}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
