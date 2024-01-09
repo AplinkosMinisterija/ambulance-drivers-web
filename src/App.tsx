@@ -67,16 +67,19 @@ function App() {
 
   useEffect(() => {
     const startWakeLock = async () => {
-      try {
+      // @ts-ignore
+      if (!!navigator?.wakeLock?.request) {
         // @ts-ignore
-        if (!!navigator?.wakeLock?.request) {
-          // @ts-ignore
-          wakeLockRef.current = await navigator.wakeLock.request('screen');
-          setSu(true);
-        }
-      } catch (err: any) {
-        handleAlert();
-        setErr(JSON.stringify({ err }));
+        navigator.wakeLock
+          .request('screen')
+          .then((wakeLock) => {
+            wakeLockRef.current = wakeLock;
+            setSu(true);
+          })
+          .catch((err) => {
+            handleAlert();
+            setErr(JSON.stringify({ err }));
+          });
       }
     };
     startWakeLock();
