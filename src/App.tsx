@@ -82,7 +82,7 @@ function App() {
         setErr(JSON.stringify({ err, retries }));
       }
     };
-    while (retries > 0 && su) {
+    while (retries > 0 && !su) {
       startWakeLock();
     }
 
