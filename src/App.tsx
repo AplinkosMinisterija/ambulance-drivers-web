@@ -65,8 +65,6 @@ function App() {
   const [err, setErr] = useState('');
   const [su, setSu] = useState(false);
 
-  const [retries, setRetries] = useState(5);
-
   useEffect(() => {
     const startWakeLock = async () => {
       try {
@@ -78,13 +76,10 @@ function App() {
         }
       } catch (err: any) {
         handleAlert();
-        setRetries((retries) => retries--);
-        setErr(JSON.stringify({ err, retries }));
+        setErr(JSON.stringify({ err }));
       }
     };
-    while (retries > 0 && !su) {
-      startWakeLock();
-    }
+    startWakeLock();
 
     return () => {
       if (wakeLockRef?.current) {
@@ -92,7 +87,7 @@ function App() {
       }
     };
     // @ts-ignore
-  }, []);
+  }, [!!navigator?.wakeLock?.request]);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
@@ -204,7 +199,7 @@ function App() {
   return (
     <>
       {err && <div>err:{err}</div>}
-      {su && <div>success:{su}</div>}
+      {su && <div>success:{su.toString()}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
