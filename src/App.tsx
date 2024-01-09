@@ -63,25 +63,28 @@ function App() {
   const [value, setValue] = useOfflineTrips();
   const wakeLockRef = useRef<any>(null);
   const [err, setErr] = useState('');
-  const [su, setSu] = useState('');
+  const [su, setSu] = useState(false);
+
+  const [retries, setRetries] = useState(5);
 
   useEffect(() => {
     const startWakeLock = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
         // @ts-ignore
         if (!!navigator?.wakeLock?.request) {
           // @ts-ignore
           wakeLockRef.current = await navigator.wakeLock.request('screen');
-          setSu('success');
+          setSu(true);
         }
       } catch (err: any) {
         handleAlert();
-        setErr(JSON.stringify(err));
+        setRetries((retries) => retries--);
+        setErr(JSON.stringify({ err, retries }));
       }
     };
-    startWakeLock();
+    while (retries > 0 && su) {
+      startWakeLock();
+    }
 
     return () => {
       if (wakeLockRef?.current) {
@@ -201,7 +204,7 @@ function App() {
   return (
     <>
       {err && <div>err:{err}</div>}
-      {su && <div>{su}</div>}
+      {su && <div>success:{su}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
