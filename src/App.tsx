@@ -78,7 +78,7 @@ function App() {
           })
           .catch((err) => {
             handleAlert();
-            setErr(JSON.stringify({ err }));
+            setErr(JSON.stringify({ err, name: err?.name, message: err?.message }));
           });
       }
     };
