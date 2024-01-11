@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import BackButton from '../components/buttons/BackButton';
 import Header from '../components/layouts/Header';
+import ActionCard from '../components/other/ActionCard';
 import DisableText from '../components/other/DisableText';
 import InfoItem from '../components/other/InfoItem';
 import LoaderComponent from '../components/other/LoaderComponent';
@@ -24,7 +25,7 @@ import {
   updateState,
 } from '../utils/functions';
 import { useIsOnline } from '../utils/hooks';
-import { formLabels, title } from '../utils/texts';
+import { buttonsTitles, formLabels, title } from '../utils/texts';
 import { Patient, Trip } from '../utils/types';
 const allPatientsTakenTypes = [
   stateTypes.tripStart,
@@ -218,6 +219,18 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
                   />
                 );
               })}
+              {trip?.hospitalPhone && (
+                <ActionContainer>
+                  <ActionCard
+                    icon={'phone'}
+                    text={buttonsTitles.callHospital}
+                    onClick={() => {
+                      //@ts-ignore
+                      window.location = `tel:+${trip?.hospitalPhone}`;
+                    }}
+                  />
+                </ActionContainer>
+              )}
             </>
           )}
         </ContentContainer>
@@ -225,6 +238,12 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
     </>
   );
 };
+
+const ActionContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  color: #84899f;
+`;
 
 const Title = styled.div`
   font-size: 1.8rem;

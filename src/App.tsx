@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isEmpty, isEqual } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, Route, Routes, useSearchParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -131,11 +131,12 @@ function App() {
         const trip = value?.[key];
 
         for (let j = 0; j < trip.length; j++) {
-          const { state, lat, lng } = trip[j];
+          const { state, lat, lng, date } = trip[j];
           await tripMutateAsync({
             parameters: {
               pavezejimas: key,
               busena: state,
+              busenos_laikas: date,
               lat,
               long: lng,
             },

@@ -6,6 +6,7 @@ import DefaultLayout from '../components/layouts/DefaultLayout';
 import LoaderComponent from '../components/other/LoaderComponent';
 import api from '../utils/api';
 import { getPatients, mapTrip } from '../utils/functions';
+import { useWakeLock } from '../utils/hooks';
 import { Patient } from '../utils/types';
 import MultiTrip from './MultiTrip';
 import SingleTrip from './SingleTrip';
@@ -27,17 +28,21 @@ const Trip = () => {
 
   const patients = getPatients(tripPatients?.value) as Patient[];
 
+  const { lockScreen } = useWakeLock();
+
   if (isFetching || patientFetching || !tripServer) return <LoaderComponent />;
 
   const trip = mapTrip(tripServer);
 
   return (
     <DefaultLayout maxWidth="800px">
-      {isEmpty(patients) ? (
-        <SingleTrip trip={trip} />
-      ) : (
-        <MultiTrip trip={trip} tripPatientsData={patients} />
-      )}
+      <div onClick={lockScreen}>
+        {isEmpty(patients) ? (
+          <SingleTrip trip={trip} />
+        ) : (
+          <MultiTrip trip={trip} tripPatientsData={patients} />
+        )}
+      </div>
     </DefaultLayout>
   );
 };

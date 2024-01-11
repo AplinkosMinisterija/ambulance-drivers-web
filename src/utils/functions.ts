@@ -184,6 +184,7 @@ export const updateState = async (
     parameters: {
       ...id,
       busena: state,
+      busenos_laikas: new Date(),
       lat,
       long: lng,
     },
@@ -234,5 +235,6 @@ export const mapTrip = (trip: TripV1Server): Trip => {
     endDate: trip?.properties?.pavezejimoPabaiga,
     time: trip?.properties?.trukme,
     direction: trip?.properties?.kryptis,
+    hospitalPhone: trip?.properties?.aspiTelNr,
   };
 };
