@@ -120,9 +120,8 @@ export const useWakeLock = () => {
     try {
       //@ts-ignore
       wakeLockRef.current = await navigator.wakeLock.request();
-      alert('success');
     } catch (err: any) {
-      alert({ err, name: err?.name, message: err?.message });
+      console.log(err);
     }
   };
 
