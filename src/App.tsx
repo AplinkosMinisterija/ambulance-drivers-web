@@ -64,7 +64,7 @@ function App() {
   const wakeLockRef = useRef<any>(null);
   const [notification, setNotification] = useState('');
 
-  const lockScreen = () => {
+  const lockScreen = async () => {
     //@ts-ignore
     if (!navigator?.wakeLock?.request) return;
 
