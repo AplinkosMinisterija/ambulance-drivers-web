@@ -18,7 +18,6 @@ import { ServerErrorCodes } from './utils/constants';
 import {
   generateCodeChallengeFromVerifier,
   generateCodeVerifier,
-  handleAlert,
   handleAlertFromServer,
   handleSetTokens,
 } from './utils/functions';
@@ -62,26 +61,27 @@ function App() {
   const isOnline = useIsOnline(false);
   const [value, setValue] = useOfflineTrips();
   const wakeLockRef = useRef<any>(null);
-  const [err, setErr] = useState('');
-  const [su, setSu] = useState(false);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const startWakeLock = async () => {
+      await new Promise((r) => setTimeout(r, 2000));
+
       // @ts-ignore
       if (!!navigator?.wakeLock?.request) {
         // @ts-ignore
         navigator.wakeLock
           .request('screen')
           .then((wakeLock) => {
+            setNotification('success');
             wakeLockRef.current = wakeLock;
-            setSu(true);
           })
           .catch((err) => {
-            handleAlert();
-            setErr(JSON.stringify({ err, name: err?.name, message: err?.message }));
+            setNotification(JSON.stringify({ err, name: err?.name, message: err?.message }));
           });
       }
     };
+
     startWakeLock();
 
     return () => {
@@ -162,11 +162,12 @@ function App() {
         const trip = value?.[key];
 
         for (let j = 0; j < trip.length; j++) {
-          const { state, lat, lng } = trip[j];
+          const { state, lat, lng, date } = trip[j];
           await tripMutateAsync({
             parameters: {
               pavezejimas: key,
               busena: state,
+              busenos_laikas: date,
               lat,
               long: lng,
             },
@@ -201,8 +202,7 @@ function App() {
 
   return (
     <>
-      {err && <div>err:{err}</div>}
-      {su && <div>success:{su.toString()}</div>}
+      {notification && <div>{notification}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>

@@ -52,6 +52,7 @@ export const buttonsTitles = {
   delete: 'Ištrinti',
   clear: 'Išvalyti',
   callPatient: 'Skambinti pacientui',
+  callHospital: 'Skambinti gydymo įstaigai',
   tripMap: 'Kelionės žemėlapis',
   install: 'Įdiegti',
   close: 'Uždaryti',

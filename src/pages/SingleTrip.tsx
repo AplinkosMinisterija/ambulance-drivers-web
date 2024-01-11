@@ -62,15 +62,16 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
         parameters: {
           pavezejimas: id,
           busena: state,
+          busenos_laikas: new Date(),
           lat,
           long: lng,
         },
       });
     } else {
       if (currentTrip) {
-        currentTrip.push({ state, lat, lng });
+        currentTrip.push({ state, lat, lng, date: new Date() });
       } else {
-        currentTrip = [{ state, lat, lng }];
+        currentTrip = [{ state, lat, lng, date: new Date() }];
       }
       setValue({ ...value, [id]: currentTrip });
     }
@@ -189,6 +190,7 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
           </Row>
 
           <TripInfo properties={trip} />
+
           <ActionContainer>
             <ActionCard
               icon={'phone'}
@@ -199,15 +201,40 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
               }}
             />
 
-            <ActionCard
-              icon={'map'}
-              text={buttonsTitles.tripMap}
-              onClick={() => {
-                //@ts-ignore
-                window.location = mapUrl;
-              }}
-            />
+            {trip?.hospitalPhone && (
+              <ActionCard
+                icon={'phone'}
+                text={buttonsTitles.callHospital}
+                onClick={() => {
+                  //@ts-ignore
+                  window.location = `tel:+${trip?.hospitalPhone}`;
+                }}
+              />
+            )}
+
+            {!trip?.hospitalPhone && (
+              <ActionCard
+                icon={'map'}
+                text={buttonsTitles.tripMap}
+                onClick={() => {
+                  //@ts-ignore
+                  window.location = mapUrl;
+                }}
+              />
+            )}
           </ActionContainer>
+          {trip?.hospitalPhone && (
+            <ActionContainer2>
+              <ActionCard
+                icon={'map'}
+                text={buttonsTitles.tripMap}
+                onClick={() => {
+                  //@ts-ignore
+                  window.location = mapUrl;
+                }}
+              />
+            </ActionContainer2>
+          )}
         </ContentContainer>
         <ButtonContainer>{renderContent()}</ButtonContainer>
         <DeleteCard
@@ -260,6 +287,15 @@ const ActionContainer = styled.div`
   margin: 24px 0 32px 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
+  color: #84899f;
+`;
+
+const ActionContainer2 = styled.div`
+  margin: -24px 0 32px 0;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 16px;
   align-items: center;
   color: #84899f;

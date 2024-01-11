@@ -2,6 +2,7 @@ export type ChildrenType = string | JSX.Element | JSX.Element[] | any;
 
 export interface TripV1Server {
   properties: {
+    aspiTelNr?: string;
     pavezejimoId: string;
     atstumas: number;
     pradinisAdresas: string;
@@ -38,6 +39,7 @@ export interface Trip {
   state: string;
   date: string;
   phone: string;
+  hospitalPhone?: string;
   startDate: Date;
   endDate: Date;
   time: number;
