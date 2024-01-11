@@ -28,7 +28,7 @@ const Trip = () => {
 
   const patients = getPatients(tripPatients?.value) as Patient[];
 
-  useWakeLock();
+  const { lockScreen } = useWakeLock();
 
   if (isFetching || patientFetching || !tripServer) return <LoaderComponent />;
 
@@ -36,11 +36,13 @@ const Trip = () => {
 
   return (
     <DefaultLayout maxWidth="800px">
-      {isEmpty(patients) ? (
-        <SingleTrip trip={trip} />
-      ) : (
-        <MultiTrip trip={trip} tripPatientsData={patients} />
-      )}
+      <div onClick={lockScreen}>
+        {isEmpty(patients) ? (
+          <SingleTrip trip={trip} />
+        ) : (
+          <MultiTrip trip={trip} tripPatientsData={patients} />
+        )}
+      </div>
     </DefaultLayout>
   );
 };

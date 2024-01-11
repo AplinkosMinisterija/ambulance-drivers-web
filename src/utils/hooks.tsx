@@ -112,27 +112,19 @@ export const useLogout = () => {
 export const useWakeLock = () => {
   const wakeLockRef = useRef<any>(null);
 
-  useEffect(() => {
-    const lockScreen = async () => {
+  const lockScreen = async () => {
+    //@ts-ignore
+    if ((wakeLockRef.current && !wakeLockRef.current.released) || !navigator?.wakeLock?.request)
+      return;
+
+    try {
       //@ts-ignore
-      if ((wakeLockRef.current && !wakeLockRef.current.released) || !navigator?.wakeLock?.request)
-        return;
+      wakeLockRef.current = await navigator.wakeLock.request();
+      alert('success');
+    } catch (err: any) {
+      alert({ err, name: err?.name, message: err?.message });
+    }
+  };
 
-      try {
-        //@ts-ignore
-        wakeLockRef.current = await navigator.wakeLock.request();
-      } catch (err: any) {
-        alert({ err, name: err?.name, message: err?.message });
-      }
-    };
-    lockScreen();
-
-    return () => {
-      if (wakeLockRef?.current) {
-        wakeLockRef.current.release();
-      }
-    };
-  }, []);
-
-  return { wakeLockRef };
+  return { lockScreen };
 };
