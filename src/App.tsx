@@ -60,35 +60,6 @@ function App() {
   const queryClient = useQueryClient();
   const isOnline = useIsOnline(false);
   const [value, setValue] = useOfflineTrips();
-  const wakeLockRef = useRef<any>(null);
-  const [notification, setNotification] = useState('');
-
-  useEffect(() => {
-    const startWakeLock = async () => {
-      // @ts-ignore
-      if (!!navigator?.wakeLock?.request) {
-        // @ts-ignore
-        navigator.wakeLock
-          .request()
-          .then((wakeLock) => {
-            setNotification('success');
-            wakeLockRef.current = wakeLock;
-          })
-          .catch((err) => {
-            setNotification(JSON.stringify({ err, name: err?.name, message: err?.message }));
-          });
-      }
-    };
-
-    startWakeLock();
-
-    return () => {
-      if (wakeLockRef?.current) {
-        wakeLockRef.current.release();
-      }
-    };
-    // @ts-ignore
-  }, [!!navigator?.wakeLock?.request]);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
@@ -200,7 +171,6 @@ function App() {
 
   return (
     <>
-      {notification && <div>{notification}</div>}
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
