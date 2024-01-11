@@ -1,7 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { intervalToDuration } from 'date-fns';
-import { cloneDeep } from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { useAppSelector } from '../state/hooks';
@@ -108,4 +107,28 @@ export const useLogout = () => {
   return {
     handleLogout,
   };
+};
+
+export const useWakeLock = () => {
+  const wakeLockRef = useRef<any>(null);
+
+  const lockScreen = async () => {
+    if (wakeLockRef.current && !wakeLockRef.current.released) return;
+
+    //@ts-ignore
+    if (!navigator?.wakeLock?.request) return;
+
+    try {
+      //@ts-ignore
+      wakeLockRef.current = await navigator.wakeLock.request();
+    } catch (err: any) {
+      console.log({ err, name: err?.name, message: err?.message });
+    }
+  };
+
+  const releaseScreen = () => {
+    wakeLockRef.current.release();
+  };
+
+  return { lockScreen, releaseScreen };
 };

@@ -6,7 +6,6 @@ import { Navigate, Outlet, Route, Routes, useSearchParams } from 'react-router-d
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
-import Button from './components/buttons/Button';
 import LoaderComponent from './components/other/LoaderComponent';
 import Login from './pages/Login';
 import Patient from './pages/Patient';
@@ -64,23 +63,32 @@ function App() {
   const wakeLockRef = useRef<any>(null);
   const [notification, setNotification] = useState('');
 
-  const lockScreen = async () => {
-    //@ts-ignore
-    if (!navigator?.wakeLock?.request) return;
+  useEffect(() => {
+    const startWakeLock = async () => {
+      // @ts-ignore
+      if (!!navigator?.wakeLock?.request) {
+        // @ts-ignore
+        navigator.wakeLock
+          .request()
+          .then((wakeLock) => {
+            setNotification('success');
+            wakeLockRef.current = wakeLock;
+          })
+          .catch((err) => {
+            setNotification(JSON.stringify({ err, name: err?.name, message: err?.message }));
+          });
+      }
+    };
 
-    try {
-      //@ts-ignore
-      wakeLockRef.current = await navigator.wakeLock.request();
-      alert('Wake Lock enabled');
-    } catch (err: any) {
-      setNotification(JSON.stringify({ err, name: err?.name, message: err?.message }));
-    }
-  };
+    startWakeLock();
 
-  const releaseScreen = () => {
-    wakeLockRef.current.release();
-    alert('Wake Lock released');
-  };
+    return () => {
+      if (wakeLockRef?.current) {
+        wakeLockRef.current.release();
+      }
+    };
+    // @ts-ignore
+  }, [!!navigator?.wakeLock?.request]);
 
   const { isFetching: refreshTokenLoading } = useQuery(
     [token, refreshToken],
@@ -193,8 +201,6 @@ function App() {
   return (
     <>
       {notification && <div>{notification}</div>}
-
-      <Button onClick={lockScreen}>IJUNGTI</Button>
       <InstallPWA />
       <Routes>
         <Route element={<PublicRoute loggedIn={loggedIn} />}>
