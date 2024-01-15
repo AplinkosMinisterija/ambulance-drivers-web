@@ -33,8 +33,9 @@ const allPatientsTakenTypes = [
   stateTypes.tripEnd,
   stateTypes.end,
 ];
-const anyPatientsTakenTypes = [stateTypes.start, stateTypes.decline];
-const allPatientsAtHomeTypes = [stateTypes.end, stateTypes.decline];
+const anyPatientTakenTypes = [stateTypes.start, stateTypes.decline];
+const destinationReachedTypes = [stateTypes.tripEnd, stateTypes.decline];
+const allPatientAtHomeTypes = [stateTypes.end, stateTypes.decline];
 
 const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: Patient[] }) => {
   const { id = '' } = useParams();
@@ -79,7 +80,6 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
   const distance = getDistance(trip?.distance);
   const duration = secondsToHHMMSS(trip?.time);
   const isDeclined = state === stateTypes.decline;
-
   useEffect(() => {
     (async () => {
       if (updateTripMutation.isLoading) return;
@@ -92,7 +92,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
         dispatch(actions.setCurrentTrip(''));
       } else if (state === stateTypes.approved) {
         const anyPatientsTaken = uniqueStops[sortedStopKeys[0]].some((item) =>
-          anyPatientsTakenTypes.includes(item.state),
+          anyPatientTakenTypes.includes(item.state),
         );
 
         if (anyPatientsTaken) {
@@ -111,14 +111,22 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
         const allPatientsAtHome = uniqueDestinations[
           filteredSortedDestinationKeys.slice(-1)[0]
         ].every((item) => {
-          return allPatientsAtHomeTypes.includes(item.state);
+          return destinationReachedTypes.includes(item.state);
         });
 
         if (allPatientsAtHome) {
-          await handleUpdateTrip(stateTypes.tripEnd).then(async () => {
-            await handleUpdateTrip(stateTypes.end);
-            dispatch(actions.setCurrentTrip(''));
-          });
+          await handleUpdateTrip(stateTypes.tripEnd);
+        }
+      } else if (state === stateTypes.tripEnd) {
+        const allPatientsAtHome = uniqueDestinations[
+          filteredSortedDestinationKeys.slice(-1)[0]
+        ].every((item) => {
+          return allPatientAtHomeTypes.includes(item.state);
+        });
+
+        if (allPatientsAtHome) {
+          await handleUpdateTrip(stateTypes.end);
+          dispatch(actions.setCurrentTrip(''));
         }
       }
     })();
@@ -142,7 +150,7 @@ const MultiTrip = ({ trip, tripPatientsData }: { trip: Trip; tripPatientsData?: 
       setCurrentGroupAddress(filteredSortedDestinationKeys[0]);
 
       filteredSortedDestinationKeys.forEach((key, index) => {
-        if (uniqueDestinations[key].every((item) => allPatientsAtHomeTypes.includes(item.state))) {
+        if (uniqueDestinations[key].every((item) => allPatientAtHomeTypes.includes(item.state))) {
           const nextAddress = filteredSortedDestinationKeys?.[index + 1];
 
           setCurrentGroupAddress('');
