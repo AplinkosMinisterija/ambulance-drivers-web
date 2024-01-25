@@ -57,6 +57,7 @@ const Container = styled.div<{ state: string }>`
   border: ${({ state }) => (borderColors[state] ? `1px solid ${borderColors[state]}` : '')};
   padding: 14px 16px;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const Name = styled.div`
