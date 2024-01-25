@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { slugs } from '../../App';
+import { device } from '../../styles';
 import api, { getMapUrl } from '../../utils/api';
 import { stateTypes } from '../../utils/constants';
 import { formatTime, handleGetCurrentLocation, updateState } from '../../utils/functions';
@@ -9,6 +11,7 @@ import { multiTripPluralButtonLabels, multiTripSingularButtonLabels } from '../.
 import { Patient } from '../../utils/types';
 import Button from '../buttons/Button';
 import Icon from './Icons';
+import Modal from './Modal';
 import PatientCard from './PatientCard';
 
 const buttonTextPlural = {
@@ -45,6 +48,8 @@ const TripGroup = ({
   isLast?: boolean;
 }) => {
   const navigate = useNavigate();
+  const [showNumbers, setShowNumbers] = useState(false);
+
   const formattedTime = formatTime(time);
   const { id } = useParams();
   const queryClient = useQueryClient();
@@ -101,59 +106,110 @@ const TripGroup = ({
   const state = getState();
 
   return (
-    <Row disabled={disabled}>
-      <InnerRow>
-        <DirectionLine>
-          {!isLast ? (
-            <>
-              <Circle />
-              <DottedLine />
-            </>
-          ) : (
-            <LocationIcon name="location" />
-          )}
-        </DirectionLine>
+    <>
+      <Row disabled={disabled}>
+        <InnerRow>
+          <DirectionLine>{!isLast ? <Circle /> : <LocationIcon name="location" />}</DirectionLine>
 
-        <Column2>
-          <ColumnRow>
-            <Column>
-              <InnerColumn>
-                <Time>{formattedTime}</Time>
-                <Location>{address}</Location>
-              </InnerColumn>
-            </Column>
-            <IconContainer onClick={getTripUrl}>
-              <StyledIcon name="map" />
-            </IconContainer>
-          </ColumnRow>
-          {!disabled &&
-            showPatientList() &&
-            group?.map((item) => {
-              return (
+          <Column2>
+            <ColumnRow>
+              <Column>
+                <InnerColumn>
+                  <Time>{formattedTime}</Time>
+                  <Location>{address}</Location>
+                </InnerColumn>
+              </Column>
+              <Column3>
+                <IconContainer
+                  onClick={() => {
+                    setShowNumbers(true);
+                  }}
+                >
+                  <StyledIcon name="phone" />
+                </IconContainer>
+                <IconContainer onClick={getTripUrl}>
+                  <StyledIcon name="map" />
+                </IconContainer>
+              </Column3>
+            </ColumnRow>
+            {!disabled &&
+              showPatientList() &&
+              group?.map((item) => {
+                return (
+                  <PatientCard
+                    state={item.state}
+                    name={item?.fullName}
+                    onClick={() => navigate(slugs.patient(item?.id))}
+                  />
+                );
+              })}
+
+            {!disabled && state && (
+              <Button
+                loading={updatePatientTrip.isLoading}
+                disabled={updatePatientTrip.isLoading}
+                onClick={() => onButtonClick(updateStates[state])}
+              >
+                {isOnePatient ? buttonTextSingular[state] : buttonTextPlural[state]}
+              </Button>
+            )}
+          </Column2>
+        </InnerRow>
+      </Row>
+      <Modal onClose={() => setShowNumbers(false)} visible={showNumbers}>
+        <ModalContainer>
+          <Title>Skambinti pacientui</Title>
+          {group?.map((item) => {
+            return (
+              <PatientContainer>
                 <PatientCard
-                  state={item.state}
+                  state={''}
                   name={item?.fullName}
-                  onClick={() => navigate(slugs.patient(item?.id))}
+                  onClick={() => {
+                    //@ts-ignore
+                    window.location = `tel:+${item.phone}`;
+                  }}
                 />
-              );
-            })}
-
-          {!disabled && state && (
-            <Button
-              loading={updatePatientTrip.isLoading}
-              disabled={updatePatientTrip.isLoading}
-              onClick={() => onButtonClick(updateStates[state])}
-            >
-              {isOnePatient ? buttonTextSingular[state] : buttonTextPlural[state]}
-            </Button>
-          )}
-        </Column2>
-      </InnerRow>
-    </Row>
+              </PatientContainer>
+            );
+          })}
+        </ModalContainer>
+      </Modal>
+    </>
   );
 };
 
 export default TripGroup;
+
+const ModalContainer = styled.div`
+  margin: 16px;
+  background-color: white;
+  box-shadow: 0px 18px 41px #121a5529;
+  border-radius: 10px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  @media ${device.mobileL} {
+    padding: 50px;
+    max-width: 100%;
+    width: 100%;
+  }
+`;
+
+const Title = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 3rem;
+  font-weight: 600;
+`;
+
+const PatientContainer = styled.div`
+  width: 100%;
+`;
 
 const DirectionLine = styled.div`
   display: flex;
@@ -174,6 +230,7 @@ const StyledIcon = styled(Icon)`
 
 const IconContainer = styled.div`
   background-color: #f5f5f5;
+  cursor: pointer;
   padding: 11px;
   border-radius: 8px;
   opacity: 1;
@@ -206,27 +263,34 @@ const Column2 = styled.div`
   margin-bottom: 45px;
 `;
 
- const InnerColumn = styled.div`
+const Column3 = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+`;
+
+const InnerColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 2px;
 `;
 
- const Time = styled.div`
+const Time = styled.div`
   font-size: 1.8rem;
   color: #1a202c;
   font-weight: bold;
   line-height: 10px;
 `;
 
- const Location = styled.div`
+const Location = styled.div`
   font-weight: bold;
   font-size: 1.4rem;
   color: #595e66;
 `;
 
- const Circle = styled.div`
+const Circle = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -234,12 +298,7 @@ const Column2 = styled.div`
   opacity: 1;
 `;
 
- const DottedLine = styled.div`
-  height: 100%;
-  border-left: 1px dashed #1a202c66;
-`;
-
- const LocationIcon = styled(Icon)`
+const LocationIcon = styled(Icon)`
   margin-left: -4px;
   color: #7fb519;
   font-size: 2.3rem;
