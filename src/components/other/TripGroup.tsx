@@ -108,7 +108,7 @@ const TripGroup = ({
   return (
     <>
       <Row disabled={disabled}>
-        <InnerRow>
+        <InnerRow isLast={isLast}>
           <DirectionLine>{!isLast ? <Circle /> : <LocationIcon name="location" />}</DirectionLine>
 
           <Column2>
@@ -218,9 +218,24 @@ const DirectionLine = styled.div`
   align-items: center;
 `;
 
-const InnerRow = styled.div`
+const InnerRow = styled.div<{ isLast: boolean }>`
   display: flex;
   gap: 12px;
+  position: relative;
+
+  ${({ isLast }) =>
+    !isLast &&
+    `
+      &::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    border-left: 1px dashed #1a202c66;
+    z-index: 0;
+    left: 6.7px;
+  }
+
+  `};
 `;
 
 const StyledIcon = styled(Icon)`
@@ -296,10 +311,13 @@ const Circle = styled.div`
   border-radius: 50%;
   border: 4px solid #0a196f;
   opacity: 1;
+  position: relative;
+  background-color: white;
 `;
 
 const LocationIcon = styled(Icon)`
   margin-left: -4px;
   color: #7fb519;
   font-size: 2.3rem;
+  z-index: 22;
 `;
