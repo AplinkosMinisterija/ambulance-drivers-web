@@ -1,6 +1,7 @@
 export enum Resources {
   PALANTIR_SIGN = 'https://vdv.stat.gov.lt/multipass/api/oauth2/authorize',
   ME = 'multipass/api/me',
+  LOGOUT = 'multipass/api/logout',
   PALANTIR_LOGIN = 'multipass/api/oauth2/token',
   TRIPS = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/objects/PavezejaiPavezejimas/search',
   TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/objects/PavezejaiPavezejimas',

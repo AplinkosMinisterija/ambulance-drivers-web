@@ -203,6 +203,12 @@ class Api {
     });
   };
 
+  logout = async () => {
+    return this.get({
+      resource: Resources.LOGOUT,
+    });
+  };
+
   palantirLogin = async ({ code }: { code: string }) => {
     if (!code) return '.';
 
