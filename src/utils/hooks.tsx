@@ -102,6 +102,7 @@ export const useLogout = () => {
     cookies.remove('token', { path: '/' });
     cookies.remove('refreshToken', { path: '/' });
     dispatch(userActions.setUser({ loggedIn: false, userData: {} }));
+    api.logout();
   };
 
   return {
