@@ -23,6 +23,9 @@ export interface TripV1Server {
     trukme: number;
     pradinioAdresoKoordString: string;
     galutinioAdresoKoordString: string;
+    papildomosPastabos: string;
+    vizitoAspįIrFilialasJeiYra_: string;
+    paėmimoAspįIrFilialasJeiYra_: string;
     kryptis: string;
   };
   rid: string;
@@ -43,6 +46,9 @@ export interface Trip {
   startDate: Date;
   endDate: Date;
   time: number;
+  notes: string;
+  visitAspi: string;
+  takeAspi: string;
 }
 
 export interface PatientServer {

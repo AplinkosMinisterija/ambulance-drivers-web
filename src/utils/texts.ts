@@ -18,6 +18,9 @@ export const inputLabels = {
   firstName: 'Vardas',
   email: 'Elektroninis paštas',
   noOptions: 'Nėra pasirinkimų',
+  notes: 'Pastabos',
+  visitAspi: 'Vizito ASPĮ',
+  takeAspi: 'Paėmimo ASPĮ',
 };
 
 export const buttonLabels = {
