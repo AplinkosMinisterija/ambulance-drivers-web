@@ -236,5 +236,8 @@ export const mapTrip = (trip: TripV1Server): Trip => {
     time: trip?.properties?.trukme,
     direction: trip?.properties?.kryptis,
     hospitalPhone: trip?.properties?.aspiTelNr,
+    notes: trip?.properties.papildomosPastabos,
+    takeAspi: trip?.properties.paėmimoAspįIrFilialasJeiYra_,
+    visitAspi: trip?.properties.vizitoAspįIrFilialasJeiYra_,
   };
 };

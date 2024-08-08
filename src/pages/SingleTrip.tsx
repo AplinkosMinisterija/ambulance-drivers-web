@@ -25,6 +25,7 @@ import {
   deleteStateDescriptions,
   deleteStateTitle,
   formLabels,
+  inputLabels,
   stateLabels,
   title,
 } from '../utils/texts';
@@ -191,6 +192,29 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
 
           <TripInfo properties={trip} />
 
+          <InfoContainer>
+            {trip?.takeAspi && (
+              <InfoInnerContainer>
+                <Label>{inputLabels.takeAspi}</Label>
+                <Comment>{trip?.takeAspi}</Comment>
+              </InfoInnerContainer>
+            )}
+
+            {trip?.visitAspi && (
+              <InfoInnerContainer>
+                <Label>{inputLabels.visitAspi}</Label>
+                <Comment>{trip?.visitAspi}</Comment>
+              </InfoInnerContainer>
+            )}
+
+            {trip?.notes && (
+              <InfoInnerContainer>
+                <Label>{inputLabels.notes}</Label>
+                <Comment>{trip?.notes}</Comment>
+              </InfoInnerContainer>
+            )}
+          </InfoContainer>
+
           <ActionContainer>
             <ActionCard
               icon={'phone'}
@@ -236,7 +260,9 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
             </ActionContainer2>
           )}
         </ContentContainer>
+
         <ButtonContainer>{renderContent()}</ButtonContainer>
+
         <DeleteCard
           visible={visible}
           title={deleteStateTitle.trip}
@@ -256,6 +282,33 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
     </>
   );
 };
+
+const Label = styled.div`
+  color: #4b5565;
+  font-size: 1.4rem;
+  letter-spacing: 0.024rem;
+  margin: 12px 0 0 0;
+  display: block;
+`;
+
+const Comment = styled.div`
+  font-size: 1.4rem;
+  color: #121926;
+  margin-bottom: 6px;
+  white-space: pre-line;
+  word-break: break-word;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const InfoInnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
 
 const Title = styled.div`
   font-size: 1.8rem;
