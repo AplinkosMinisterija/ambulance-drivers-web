@@ -15,7 +15,7 @@ jobs:
     with:
       environment: Production
       docker-image: ghcr.io/AplinkosMinisterija/ambulance-drivers-web
-      enable-sentry: true
+      enable-sentry: false
       build-args: | 
         VITE_SENTRY_DSN=https://856d293179cc436aa50e9bb58b606067@sentry.biip.lt/45
         VITE_CLIENT_ID=8250078977a31f0d5733c53b501f7f69
