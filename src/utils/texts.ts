@@ -21,6 +21,8 @@ export const inputLabels = {
   notes: 'Pastabos',
   visitAspi: 'Vizito ASPĮ',
   takeAspi: 'Paėmimo ASPĮ',
+  escortService: 'Palydėjimo paslauga',
+  transportedPerson: 'Vežamo asmens vardas ir pavardė',
 };
 
 export const buttonLabels = {

@@ -27,6 +27,9 @@ export interface TripV1Server {
     vizitoAspįIrFilialasJeiYra_: string;
     paėmimoAspįIrFilialasJeiYra_: string;
     kryptis: string;
+    vardas: string;
+    pavardė: string;
+    arPacientuiReikalingaPalydėjimoPaslauga_: string;
   };
   rid: string;
 }
@@ -49,6 +52,9 @@ export interface Trip {
   notes: string;
   visitAspi: string;
   takeAspi: string;
+  firstName: string;
+  lastName: string;
+  escortService: string;
 }
 
 export interface PatientServer {

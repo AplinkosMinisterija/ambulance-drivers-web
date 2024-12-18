@@ -199,6 +199,21 @@ const SingleTrip = ({ trip }: { trip: Trip }) => {
                 <Comment>{trip?.takeAspi}</Comment>
               </InfoInnerContainer>
             )}
+            {trip?.escortService && (
+              <InfoInnerContainer>
+                <Label>{inputLabels.escortService}</Label>
+                <Comment>{trip?.escortService}</Comment>
+              </InfoInnerContainer>
+            )}
+
+            {trip?.firstName && trip?.lastName && (
+              <InfoInnerContainer>
+                <Label>{inputLabels.transportedPerson}</Label>
+                <Comment>
+                  {trip?.firstName} {trip?.lastName}
+                </Comment>
+              </InfoInnerContainer>
+            )}
 
             {trip?.visitAspi && (
               <InfoInnerContainer>
