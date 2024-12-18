@@ -239,5 +239,8 @@ export const mapTrip = (trip: TripV1Server): Trip => {
     notes: trip?.properties.papildomosPastabos,
     takeAspi: trip?.properties.paėmimoAspįIrFilialasJeiYra_,
     visitAspi: trip?.properties.vizitoAspįIrFilialasJeiYra_,
+    firstName: trip?.properties?.vardas,
+    lastName: trip?.properties?.pavardė,
+    escortService: trip?.properties?.arPacientuiReikalingaPalydėjimoPaslauga_,
   };
 };
