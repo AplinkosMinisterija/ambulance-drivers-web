@@ -3,12 +3,12 @@ export enum Resources {
   ME = 'multipass/api/me',
   LOGOUT = 'multipass/api/logout',
   PALANTIR_LOGIN = 'multipass/api/oauth2/token',
-  TRIPS = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/objects/PavezejaiPavezejimas/search',
-  TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/objects/PavezejaiPavezejimas',
+  TRIPS = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/objects/PavezejaiPavezejimas/search',
+  TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/objects/PavezejaiPavezejimas',
   TRIP_PATIENT = 'api/v2/ontologies/default/queries/getVienasElementasDecryptVardasPavarde/execute?preview=true',
   TRIP_PATIENTS = 'api/v2/ontologies/default/queries/getElementaiDecryptVardasPavarde/execute?preview=true',
-  UPDATE_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/actions/pavezejai-pakeisti-pavezejimo-busena-su-koordinatemis/apply',
-  UPDATE_PATIENT_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.00000000-0000-0000-0000-000000000000/actions/pavezejai-pakeisti-pavezejimo-elementu-busena-ir-koordinates/apply',
+  UPDATE_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/actions/pavezejai-pakeisti-pavezejimo-busena-su-koordinatemis/apply',
+  UPDATE_PATIENT_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/actions/pavezejai-pakeisti-pavezejimo-elementu-busena-ir-koordinates/apply',
 }
 
 export enum TagColors {
