@@ -36,6 +36,10 @@ To get started with the Ambulance Drivers web, follow the instructions below.
    yarn install
    ```
 
+3. Setup `.env` file
+
+Copy `.env.example` to `.env` 
+
 ### Usage
 
 1. Start the WEB server:

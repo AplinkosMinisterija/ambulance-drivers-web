@@ -11,9 +11,14 @@ export default () => {
     server: {
       proxy: {
         '/proxy/palantir': {
-          target: env.VITE_PROXY_URL,
+          target: env.VITE_PROXY_PALANTIR_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/proxy\/palantir/, ''),
+        },
+        '/proxy/distance': {
+          target: env.VITE_PROXY_DISTANCE_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/proxy\/distance/, ''),
         },
       },
     },
