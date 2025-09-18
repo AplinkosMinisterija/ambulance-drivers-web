@@ -29,7 +29,7 @@ const Trips = () => {
   const [value] = useOfflineTrips();
   const currentTripId = useAppSelector((state) => state.currentTripId);
 
-  const { handleLogout } = useLogout();
+    const { handleLogout } = useLogout();
 
   useEffect(() => {
     if (!isOnline) {
@@ -92,19 +92,27 @@ const Trips = () => {
 
     const mappedTrips = data?.data.map((item) => mapTrip(item)) || [];
 
+    // Filter trips by time window
+    const now = new Date();
+    const filteredTrips = mappedTrips.filter((trip) => {
+      const start = new Date(trip.startDate);
+      const end = new Date(trip.endDate);
+      const withinStartWindow = now.getTime() <= start.getTime() + 60 * 60 * 1000;
+      const withinEndWindow = now.getTime() <= end.getTime() + 15 * 60 * 1000;
+      return withinStartWindow && withinEndWindow;
+    });
+
     const isDisabledTrip = (trip: Trip) => {
       if (!currentTripId) return;
-
       return trip.id !== currentTripId;
     };
 
     return (
       <>
-        {mappedTrips
+        {filteredTrips
           .filter((item) => item.state !== 'Atšauktas')
           ?.map((trip) => {
             const offlineTrip = value?.[trip?.id] ? [...value[trip?.id]] : undefined;
-
             return (
               <TripCard
                 disabled={isDisabledTrip(trip)}
