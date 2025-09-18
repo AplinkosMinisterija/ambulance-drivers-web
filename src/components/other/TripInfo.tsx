@@ -4,11 +4,12 @@ import Icon from './Icons';
 
 const TripInfo = ({ properties, stopsCount }: { properties: any; stopsCount?: number }) => {
   if (!properties) return <></>;
-  const { startAddress, endAddress, startDate, endDate } = properties;
+  const { startAddress, endAddress, startDate, endDate, accompanyPersonName, accompanyPersonSurName, accompanyPersonPhoneNumber} = properties;
   const formattedStartTime = formatTime(startDate);
   const formattedEndTime = formatTime(endDate);
 
   return (
+  <>
     <Row>
       <IconContainer>
         <Circle />
@@ -18,18 +19,30 @@ const TripInfo = ({ properties, stopsCount }: { properties: any; stopsCount?: nu
       <Column>
         <InnerColumn>
           <Time>{formattedStartTime}</Time>
-          <Location>{startAddress || 'Nėra nurodytas pradinis  adresas'}</Location>
+          <Location>{startAddress || 'Nėra nurodytas pradinis adresas'}</Location>
         </InnerColumn>
         {stopsCount ? (
           <AdditionalTrips>{`+ ${stopsCount} tarpiniai sustojimai`}</AdditionalTrips>
-        ) : undefined}
+        ) : null}
         <InnerColumn>
           <Time>{formattedEndTime}</Time>
-          <Location>{endAddress || 'Nėra nurodytas galutinis  adresas'}</Location>
+          <Location>{endAddress || 'Nėra nurodytas galutinis adresas'}</Location>
         </InnerColumn>
       </Column>
     </Row>
-  );
+
+    {/* Accompanying Person Section */}
+    <Title>Palydinčio asmens informacija</Title>
+    <Row>
+      <Column>
+        <PersonInfo><strong>Vardas:</strong> {accompanyPersonName}</PersonInfo>
+        <PersonInfo><strong>Pavardė:</strong> {accompanyPersonSurName}</PersonInfo>
+        <PersonInfo><strong>Telefono numeris:</strong> {accompanyPersonPhoneNumber}</PersonInfo>
+      </Column>
+    </Row>
+  </>
+);
+
 };
 
 export default TripInfo;
@@ -95,5 +108,15 @@ const LocationIcon = styled(Icon)`
 const AdditionalTrips = styled.div`
   color: #0a196f;
   font-weight: 600;
+  font-size: 1.4rem;
+`;
+const Title = styled.div`
+  font-weight: 600;
+  font-size: 1.4rem;
+  display: block;
+`;
+const PersonInfo = styled.div`
+  color: #0a196f;
+  font-weight: 500;
   font-size: 1.4rem;
 `;
