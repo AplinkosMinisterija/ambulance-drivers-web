@@ -116,7 +116,7 @@ const Title = styled.div`
   display: block;
 `;
 const PersonInfo = styled.div`
-  color: #0a196f;
+  color: #0d0d10ff;
   font-weight: 500;
   font-size: 1.4rem;
 `;

@@ -93,13 +93,16 @@ const Trips = () => {
     const mappedTrips = data?.data.map((item) => mapTrip(item)) || [];
 
     // Filter trips by time window
-    const now = new Date();
-    const filteredTrips = mappedTrips.filter((trip) => {
-      const start = new Date(trip.startDate);
-      const end = new Date(trip.endDate);
-      const withinStartWindow = now.getTime() <= start.getTime() + 60 * 60 * 1000;
-      const withinEndWindow = now.getTime() <= end.getTime() + 15 * 60 * 1000;
-      return withinStartWindow && withinEndWindow;
+  const now = new Date().getTime();
+  const filteredTrips = mappedTrips.filter((trip) => {
+  const start = new Date(trip.startDate).getTime();
+  const end = new Date(trip.endDate).getTime();
+
+  const visibleFrom = start - 60 * 60 * 1000; // 1 hour before start
+  const visibleUntil = end + 15 * 60 * 1000;  // 15 minutes after end
+
+  return now >= visibleFrom && now <= visibleUntil;
+
     });
 
     const isDisabledTrip = (trip: Trip) => {
