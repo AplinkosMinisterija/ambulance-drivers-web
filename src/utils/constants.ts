@@ -5,8 +5,8 @@ export enum Resources {
   PALANTIR_LOGIN = 'multipass/api/oauth2/token',
   TRIPS = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/objects/PavezejaiPavezejimas/search',
   TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/objects/PavezejaiPavezejimas',
-  TRIP_PATIENT = 'api/v2/ontologies/default/queries/getVienasElementasDecryptVardasPavarde/execute?preview=true',
-  TRIP_PATIENTS = 'api/v2/ontologies/default/queries/getElementaiDecryptVardasPavarde/execute?preview=true',
+  TRIP_PATIENT = 'api/v2/ontologies/ontology-290262e8-c6a5-4d5c-9ed7-8dc71c53ae0c/queries/getVienasElementasDecryptVardasPavarde/execute?preview=true',
+  TRIP_PATIENTS = 'api/v2/ontologies/ontology-290262e8-c6a5-4d5c-9ed7-8dc71c53ae0c/queries/getElementaiDecryptVardasPavarde/execute?preview=true',
   UPDATE_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/actions/pavezejai-pakeisti-pavezejimo-busena-su-koordinatemis/apply',
   UPDATE_PATIENT_TRIP = 'api/v1/ontologies/ri.ontology.main.ontology.3a30bbf0-f1a2-401c-bd13-787b48766b99/actions/pavezejai-pakeisti-pavezejimo-elementu-busena-ir-koordinates/apply',
 }
