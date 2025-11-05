@@ -242,5 +242,8 @@ export const mapTrip = (trip: TripV1Server): Trip => {
     firstName: trip?.properties?.vardas,
     lastName: trip?.properties?.pavardė,
     escortService: trip?.properties?.arPacientuiReikalingaPalydėjimoPaslauga_,
+    accompanyPersonName: trip?.properties?.lydinčioAsmensVardas,
+    accompanyPersonSurName: trip?.properties?.lydinčioAsmensPavardė,
+    accompanyPersonPhoneNumber: trip?.properties?.lydincioAsmensTelefonoNumeris
   };
 };
