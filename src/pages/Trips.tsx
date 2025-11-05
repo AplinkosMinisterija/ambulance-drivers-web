@@ -29,7 +29,7 @@ const Trips = () => {
   const [value] = useOfflineTrips();
   const currentTripId = useAppSelector((state) => state.currentTripId);
 
-    const { handleLogout } = useLogout();
+  const { handleLogout } = useLogout();
 
   useEffect(() => {
     if (!isOnline) {
@@ -93,16 +93,15 @@ const Trips = () => {
     const mappedTrips = data?.data.map((item) => mapTrip(item)) || [];
 
     // Filter trips by time window
-  const now = new Date().getTime();
-  const filteredTrips = mappedTrips.filter((trip) => {
-  const start = new Date(trip.startDate).getTime();
-  const end = new Date(trip.endDate).getTime();
+    const now = new Date().getTime();
+    const filteredTrips = mappedTrips.filter((trip) => {
+      const start = new Date(trip.startDate).getTime();
+      const end = new Date(trip.endDate).getTime();
 
-  const visibleFrom = start - 60 * 60 * 1000; // 1 hour before start
-  const visibleUntil = end + 15 * 60 * 1000;  // 15 minutes after end
+      const visibleFrom = start - 60 * 60 * 1000; // 1 hour before start
+      const visibleUntil = end + 15 * 60 * 1000;  // 15 minutes after end
 
-  return now >= visibleFrom && now <= visibleUntil;
-
+      return now >= visibleFrom && now <= visibleUntil;
     });
 
     const isDisabledTrip = (trip: Trip) => {
