@@ -29,9 +29,6 @@ export interface TripV1Server {
     kryptis: string;
     vardas: string;
     pavardė: string;
-    lydinčioAsmensVardas: string;
-    lydinčioAsmensPavardė: string;
-    lydincioAsmensTelefonoNumeris: string;
     arPacientuiReikalingaPalydėjimoPaslauga_: string;
   };
   rid: string;
@@ -58,9 +55,6 @@ export interface Trip {
   firstName: string;
   lastName: string;
   escortService: string;
-  accompanyPersonName: string;
-  accompanyPersonSurName: string;
-  accompanyPersonPhoneNumber: string;
 }
 
 export interface PatientServer {
