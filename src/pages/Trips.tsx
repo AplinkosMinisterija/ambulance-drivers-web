@@ -92,29 +92,19 @@ const Trips = () => {
 
     const mappedTrips = data?.data.map((item) => mapTrip(item)) || [];
 
-    // Filter trips by time window
-    const now = new Date().getTime();
-    const filteredTrips = mappedTrips.filter((trip) => {
-      const start = new Date(trip.startDate).getTime();
-      const end = new Date(trip.endDate).getTime();
-
-      const visibleFrom = start - 60 * 60 * 1000; // 1 hour before start
-      const visibleUntil = end + 15 * 60 * 1000;  // 15 minutes after end
-
-      return now >= visibleFrom && now <= visibleUntil;
-    });
-
     const isDisabledTrip = (trip: Trip) => {
       if (!currentTripId) return;
+
       return trip.id !== currentTripId;
     };
 
     return (
       <>
-        {filteredTrips
+        {mappedTrips
           .filter((item) => item.state !== 'Atšauktas')
           ?.map((trip) => {
             const offlineTrip = value?.[trip?.id] ? [...value[trip?.id]] : undefined;
+
             return (
               <TripCard
                 disabled={isDisabledTrip(trip)}
